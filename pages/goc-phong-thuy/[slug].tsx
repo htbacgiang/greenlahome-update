@@ -29,6 +29,7 @@ type PostData = {
     slug: string;
     category: string;
     thumbnail?: string;
+    isDirectPost?: boolean;
   }[];
 };
 
@@ -61,6 +62,8 @@ type Props = {
 };
 
 const host = "https://greenlahome.vn/goc-phong-thuy";
+const getPostHref = (post: { slug: string; isDirectPost?: boolean }) =>
+  post.isDirectPost ? `/${post.slug}` : `/bai-viet/${post.slug}`;
 
 export const APP_NAME = "Greenla Home";
 const SinglePost: NextPage<Props> = ({ post }) => {
@@ -109,7 +112,7 @@ const SinglePost: NextPage<Props> = ({ post }) => {
                 .filter((p) => p.category === category)
                 .slice(0, 5)
                 .map((p) => (
-                  <Link key={p.slug} href={`/bai-viet/${p.slug}`} legacyBehavior>
+                  <Link key={p.slug} href={getPostHref(p)} legacyBehavior>
                     <a className="flex space-x-3 items-start group">
                       {/* Ảnh thu nhỏ */}
                       {p.thumbnail && (
@@ -166,7 +169,7 @@ export const getServerSideProps: GetServerSideProps<
     })
       .sort({ createdAt: "desc" })
       .limit(5)
-      .select("slug title thumbnail category");
+      .select("slug title thumbnail category isDirectPost");
 
     const relatedPosts = posts.map((p) => ({
       id: p._id.toString(),
@@ -174,6 +177,7 @@ export const getServerSideProps: GetServerSideProps<
       slug: p.slug,
       category: p.category || "Uncategorized",
       thumbnail: p.thumbnail?.url,
+      isDirectPost: p.isDirectPost || false,
     }));
 
     const { _id, title, content, meta, slug, tags, thumbnail, category, createdAt } = post;

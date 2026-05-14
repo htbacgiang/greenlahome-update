@@ -265,6 +265,8 @@ const Editor: FC<Props> = ({
       formData.append("meta", post.meta || "");
       formData.append("slug", post.slug || `draft-${Date.now()}`);
       formData.append("category", post.category || "");
+      formData.append("isFeatured", String(isFeatured));
+      formData.append("isDirectPost", String(isDirectPost));
 
       // Xử lý tags an toàn hơn
       let tagsArray: string[] = [];
@@ -302,7 +304,7 @@ const Editor: FC<Props> = ({
     } finally {
       setSavingDraft(false);
     }
-  }, [editor, post, isCreatingNewPost]);
+  }, [editor, post, isCreatingNewPost, isFeatured, isDirectPost]);
 
   const publishDraft = useCallback(async () => {
     if (!post.id) {

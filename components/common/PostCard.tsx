@@ -39,7 +39,7 @@ const PostCard: FC<Props> = ({
     }
   };
 
-  const postPath = `/${getCategoryPath(category)}/${slug}`;
+  const postPath = post.isDirectPost ? `/${slug}` : `/${getCategoryPath(category)}/${slug}`;
 
   const highlightedTitle = useMemo(
     () =>

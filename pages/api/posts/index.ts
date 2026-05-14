@@ -24,6 +24,37 @@ const handler: NextApiHandler = async (req, res) => {
   }
 };
 
+const getFieldValue = (value: any) => Array.isArray(value) ? value[0] : value;
+
+const parseBooleanField = (value: any): boolean => {
+  const normalizedValue = getFieldValue(value);
+  return normalizedValue === true ||
+    normalizedValue === "true" ||
+    normalizedValue === "1" ||
+    normalizedValue === 1;
+};
+
+const parseOptionalBooleanField = (value: any): boolean | undefined => {
+  const normalizedValue = getFieldValue(value);
+  if (
+    normalizedValue === true ||
+    normalizedValue === "true" ||
+    normalizedValue === "1" ||
+    normalizedValue === 1
+  ) {
+    return true;
+  }
+  if (
+    normalizedValue === false ||
+    normalizedValue === "false" ||
+    normalizedValue === "0" ||
+    normalizedValue === 0
+  ) {
+    return false;
+  }
+  return undefined;
+};
+
 const createNewPost: NextApiHandler = async (req, res) => {
   const token = await getToken({ req, secret: process.env.JWT_SECRET });
   const session = token ? { user: token } : null;
@@ -70,27 +101,9 @@ const createNewPost: NextApiHandler = async (req, res) => {
         existingPostId
       );
 
-      const isFeaturedValue = (body as any).isFeatured;
-      const isFeatured =
-        isFeaturedValue === "true" ||
-        isFeaturedValue === true ||
-        isFeaturedValue === "1";
-      const isDirectPostValue = (body as any).isDirectPost;
-      const isDirectPost =
-        isDirectPostValue === "true" ||
-        isDirectPostValue === true ||
-        isDirectPostValue === "1";
-      const isDraftValue = (body as any).isDraft;
-      const parsedIsDraft =
-        isDraftValue === true ||
-        isDraftValue === "true" ||
-        isDraftValue === "1"
-          ? true
-          : isDraftValue === false ||
-              isDraftValue === "false" ||
-              isDraftValue === "0"
-            ? false
-            : undefined;
+      const isFeatured = parseBooleanField((body as any).isFeatured);
+      const isDirectPost = parseBooleanField((body as any).isDirectPost);
+      const parsedIsDraft = parseOptionalBooleanField((body as any).isDraft);
 
       existingPost.title = title;
       existingPost.content = content;
@@ -133,11 +146,8 @@ const createNewPost: NextApiHandler = async (req, res) => {
       slug && slug.trim() ? slug.trim() : title || undefined
     );
 
-    const isFeaturedValue = (body as any).isFeatured;
-    const isFeatured = isFeaturedValue === 'true' || isFeaturedValue === true || isFeaturedValue === '1';
-
-    const isDirectPostValue = (body as any).isDirectPost;
-    const isDirectPost = isDirectPostValue === 'true' || isDirectPostValue === true || isDirectPostValue === '1';
+    const isFeatured = parseBooleanField((body as any).isFeatured);
+    const isDirectPost = parseBooleanField((body as any).isDirectPost);
 
     // Tạo bài viết mới
     const newPost = new Post({

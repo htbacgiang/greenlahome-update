@@ -26,6 +26,37 @@ const handler: NextApiHandler = async (req, res) => {
   }
 };
 
+const getFieldValue = (value: any) => Array.isArray(value) ? value[0] : value;
+
+const parseBooleanField = (value: any): boolean => {
+  const normalizedValue = getFieldValue(value);
+  return normalizedValue === true ||
+    normalizedValue === "true" ||
+    normalizedValue === "1" ||
+    normalizedValue === 1;
+};
+
+const parseOptionalBooleanField = (value: any): boolean | undefined => {
+  const normalizedValue = getFieldValue(value);
+  if (
+    normalizedValue === true ||
+    normalizedValue === "true" ||
+    normalizedValue === "1" ||
+    normalizedValue === 1
+  ) {
+    return true;
+  }
+  if (
+    normalizedValue === false ||
+    normalizedValue === "false" ||
+    normalizedValue === "0" ||
+    normalizedValue === 0
+  ) {
+    return false;
+  }
+  return undefined;
+};
+
 const removePost: NextApiHandler = async (req, res) => {
   const token = await getToken({ req, secret: process.env.JWT_SECRET });
   const session = token ? { user: token } : null;
@@ -103,9 +134,9 @@ const updatePost: NextApiHandler = async (req, res) => {
     }
 
     const { title, content, meta, slug, category } = body;
-    const isDraft = (body as any).isDraft;
-    const isFeatured = (body as any).isFeatured === 'true' || (body as any).isFeatured === true;
-    const isDirectPost = (body as any).isDirectPost === 'true' || (body as any).isDirectPost === true;
+    const isDraft = parseOptionalBooleanField((body as any).isDraft);
+    const isFeatured = parseBooleanField((body as any).isFeatured);
+    const isDirectPost = parseBooleanField((body as any).isDirectPost);
 
     // Đảm bảo slug duy nhất
     const uniqueSlug = await ensureUniqueSlug(
@@ -123,9 +154,7 @@ const updatePost: NextApiHandler = async (req, res) => {
       post.isDraft = isDraft;
     }
 
-    if (typeof isFeatured === 'boolean') {
-      post.isFeatured = isFeatured;
-    }
+    post.isFeatured = isFeatured;
 
     post.isDirectPost = isDirectPost;
 

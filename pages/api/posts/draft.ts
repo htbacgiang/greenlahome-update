@@ -28,6 +28,16 @@ const handler: NextApiHandler = async (req, res) => {
   }
 };
 
+const getFieldValue = (value: any) => Array.isArray(value) ? value[0] : value;
+
+const parseBooleanField = (value: any): boolean => {
+  const normalizedValue = getFieldValue(value);
+  return normalizedValue === true ||
+    normalizedValue === "true" ||
+    normalizedValue === "1" ||
+    normalizedValue === 1;
+};
+
 const saveDraft: NextApiHandler = async (req, res) => {
   const token = await getToken({ req, secret: process.env.JWT_SECRET });
   const session = token ? { user: token } : null;
@@ -53,6 +63,8 @@ const saveDraft: NextApiHandler = async (req, res) => {
     const { title, content, slug, meta, category } = fields;
     const normalizedCategory = normalizePostCategory(category);
     const postId = (fields as any).postId;
+    const isFeatured = parseBooleanField((fields as any).isFeatured);
+    const isDirectPost = parseBooleanField((fields as any).isDirectPost);
 
       await db.connectDb();
 
@@ -79,6 +91,8 @@ const saveDraft: NextApiHandler = async (req, res) => {
         existingPost.tags = tags;
         existingPost.category = normalizedCategory || existingPost.category;
         existingPost.isDraft = true;
+        existingPost.isFeatured = isFeatured;
+        existingPost.isDirectPost = isDirectPost;
 
         // Nếu có thumbnail mới, upload lên Cloudinary
         if (files.thumbnail) {
@@ -104,6 +118,8 @@ const saveDraft: NextApiHandler = async (req, res) => {
         category: normalizedCategory,
         author: session.user.sub,
         isDraft: true,
+        isFeatured: isFeatured || false,
+        isDirectPost: isDirectPost || false,
       });
 
       // Nếu có thumbnail, upload lên Cloudinary

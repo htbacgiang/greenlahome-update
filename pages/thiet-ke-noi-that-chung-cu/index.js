@@ -7,6 +7,9 @@ import { formatPosts, readPostsFromDb } from '../../lib/utils';
 import { useState, useRef, useEffect } from "react";
 import ThietKeNoiThatChungCuPage from '../../components/tantruonggiang/ChungCuPage';
 
+const getPostHref = (post) =>
+  post.isDirectPost ? `/${post.slug}` : `/bai-viet/${post.slug}`;
+
 export default function ThietKeNoiThatChungCu({ relatedPosts, meta }) {
   const [formData, setFormData] = useState({
     name: "",
@@ -254,7 +257,7 @@ export default function ThietKeNoiThatChungCu({ relatedPosts, meta }) {
                     </div>
                   )}
                   <div className="mt-2">
-                    <Link href={`/bai-viet/${post.slug}`} className="text-blue-600 hover:underline">
+                    <Link href={getPostHref(post)} className="text-blue-600 hover:underline">
                       {post.title}
                     </Link>
                     <p className="text-sm text-gray-500">
@@ -364,7 +367,7 @@ export default function ThietKeNoiThatChungCu({ relatedPosts, meta }) {
 
 export const getServerSideProps = async () => {
   try {
-    const posts = await readPostsFromDb(3, 0);
+    const posts = await readPostsFromDb(3, 0, undefined, false, true);
     const formattedPosts = formatPosts(posts);
     const meta = {
       title: "Thiết kế nội thất chung cư đẹp hiện đại | Tối ưu không gian | Greenlahome",

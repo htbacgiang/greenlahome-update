@@ -67,6 +67,9 @@ interface Props {
   initialPosts: PostDetail[];
 }
 
+const getPostHref = (post: { slug: string; isDirectPost?: boolean }) =>
+  post.isDirectPost ? `/${post.slug}` : `/bai-viet/${post.slug}`;
+
 const Blogs: NextPage<Props> = ({ initialPosts = [] }) => {
   const posts = initialPosts;
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
@@ -188,7 +191,7 @@ const Blogs: NextPage<Props> = ({ initialPosts = [] }) => {
                   {/* Main Featured */}
                   {featuredPosts[0]?.thumbnail && (
                     <div className="w-full lg:w-8/12 flex flex-col gap-2">
-                      <Link href={`/bai-viet/${featuredPosts[0].slug}`}>
+                      <Link href={getPostHref(featuredPosts[0])}>
                         <div className="aspect-video relative cursor-pointer rounded shadow-sm shadow-secondary-dark overflow-hidden group">
                           <Image
                             src={featuredPosts[0].thumbnail}
@@ -200,7 +203,7 @@ const Blogs: NextPage<Props> = ({ initialPosts = [] }) => {
                       </Link>
                       <div className="flex items-center gap-2">
                         <Link
-                          href={`/bai-viet/${featuredPosts[0].slug}`}
+                          href={getPostHref(featuredPosts[0])}
                           className="text-green-800 lg:text-lg uppercase font-bold hover:text-green-600 transition-colors"
                         >
                           {featuredPosts[0].title}
@@ -220,7 +223,7 @@ const Blogs: NextPage<Props> = ({ initialPosts = [] }) => {
                     {featuredPosts.slice(1, 4).map((post, idx) => (
                       post.thumbnail && (
                         <div key={post.id} className="flex justify-between gap-4 h-auto lg:h-1/3">
-                          <Link href={`/bai-viet/${post.slug}`} className="w-1/3 aspect-video relative cursor-pointer rounded shadow-sm shadow-secondary-dark overflow-hidden group">
+                          <Link href={getPostHref(post)} className="w-1/3 aspect-video relative cursor-pointer rounded shadow-sm shadow-secondary-dark overflow-hidden group">
                             <Image
                               src={post.thumbnail}
                               layout="fill"
@@ -230,7 +233,7 @@ const Blogs: NextPage<Props> = ({ initialPosts = [] }) => {
                           </Link>
                           <div className="w-2/3 flex flex-col justify-center">
                             <div className="flex items-center gap-2 text-sm lg:text-base mb-1">
-                              <Link href={`/bai-viet/${post.slug}`} className="text-green-800 uppercase font-bold hover:text-green-600 transition-colors">
+                              <Link href={getPostHref(post)} className="text-green-800 uppercase font-bold hover:text-green-600 transition-colors">
                                 {post.title}
                               </Link>
                             </div>
@@ -292,7 +295,7 @@ const Blogs: NextPage<Props> = ({ initialPosts = [] }) => {
                         <div className="py-6">
                           {/* Title */}
                           <h3 className="text-lg font-bold text-gray-900 leading-tight group-hover:text-green-600 transition-colors line-clamp-2">
-                            <Link href={`/bai-viet/${post.slug}`}>
+                            <Link href={getPostHref(post)}>
                               {post.title}
                             </Link>
                           </h3>
@@ -305,7 +308,7 @@ const Blogs: NextPage<Props> = ({ initialPosts = [] }) => {
                             </div>
                             {/* Read More */}
                             <Link
-                              href={`/bai-viet/${post.slug}`}
+                              href={getPostHref(post)}
                               className="inline-flex items-center text-red-500 hover:text-green-600 font-medium transition-colors group/link"
                             >
                               Đọc thêm
@@ -451,7 +454,7 @@ const Blogs: NextPage<Props> = ({ initialPosts = [] }) => {
 export const getServerSideProps: GetServerSideProps = async () => {
   try {
     // Fetch posts, exclude drafts (includeDrafts = false by default)
-    const raw = await readPostsFromDb(undefined, undefined, undefined, false);
+    const raw = await readPostsFromDb(undefined, undefined, undefined, false, true);
     const posts = formatPosts(raw) || [];
 
     return {

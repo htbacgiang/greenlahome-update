@@ -20,6 +20,7 @@ import {
   ChevronRight,
   Package,
   ClipboardList,
+  Menu,
 } from "lucide-react";
 
 import { useRouter } from "next/router";
@@ -29,6 +30,12 @@ const NAV_GROUPS = [
     label: "Tổng quan",
     items: [
       { title: "Dashboard", icon: LayoutGrid, href: "/dashboard" },
+    ],
+  },
+  {
+    label: "Giao diện",
+    items: [
+      { title: "Quản lý Menu", icon: Menu, href: "/dashboard/quan-ly-navigation" },
     ],
   },
   {

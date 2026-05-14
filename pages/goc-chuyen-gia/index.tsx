@@ -36,6 +36,9 @@ type Props = {
   meta: MetaData;
 };
 
+const getPostHref = (post: { slug: string; isDirectPost?: boolean }) =>
+  post.isDirectPost ? `/${post.slug}` : `/bai-viet/${post.slug}`;
+
 const Blogs: NextPage<Props> = ({ posts, meta }) => {
   const postsPerPage = 9;
   const [currentPage, setCurrentPage] = useState(1);
@@ -143,7 +146,7 @@ const Blogs: NextPage<Props> = ({ posts, meta }) => {
                           className="relative cursor-pointer rounded-lg overflow-hidden"
                           style={{ aspectRatio: "16/9" }}
                         >
-                          <Link href={`/bai-viet/${post.slug}`}>
+                          <Link href={getPostHref(post)}>
                             <Image
                               src={post.thumbnail}
                               fill
@@ -160,14 +163,14 @@ const Blogs: NextPage<Props> = ({ posts, meta }) => {
                           {formatDate(post.createdAt)} - {post.category}
                         </p>
                         <Link
-                          href={`/bai-viet/${post.slug}`}
+                          href={getPostHref(post)}
                           className="text-base md:text-xl font-bold hover:text-green-500 text-green-600"
                           aria-label={post.title}
                         >
                           {post.title}
                         </Link>
                         <Link
-                          href={`/bai-viet/${post.slug}`}
+                          href={getPostHref(post)}
                           className="text-sm text-gray-400 uppercase hover:text-green-600"
                         >
                           Xem thêm
@@ -263,7 +266,7 @@ const Blogs: NextPage<Props> = ({ posts, meta }) => {
                       className="w-3/6 relative cursor-pointer rounded-lg overflow-hidden"
                       style={{ aspectRatio: "1/1", maxHeight: "100px" }}
                     >
-                      <Link href={`/bai-viet/${post.slug}`}>
+                      <Link href={getPostHref(post)}>
                         <Image
                           src={post.thumbnail}
                           fill={true}
@@ -278,7 +281,7 @@ const Blogs: NextPage<Props> = ({ posts, meta }) => {
                       {formatDate(post.createdAt)}
                     </p>
                     <Link
-                      href={`/bai-viet/${post.slug}`}
+                      href={getPostHref(post)}
                       className="text-base font-medium hover:text-green-500 text-green-600 line-clamp-2"
                       aria-label={post.title}
                     >
@@ -300,7 +303,7 @@ export const getServerSideProps: GetServerSideProps<{
   meta: MetaData;
 }> = async () => {
   try {
-    const posts = await readPostsFromDb(10000, 0);
+    const posts = await readPostsFromDb(10000, 0, undefined, false, true);
     const formattedPosts: PostDetail[] = formatPosts(posts).filter(
       (post) => post.category === "Góc Chuyên Gia"
     );

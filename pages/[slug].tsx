@@ -1,16 +1,13 @@
-import {
-  GetServerSideProps,
-  NextPage,
-} from "next";
+import { GetServerSideProps, NextPage } from "next";
 // @ts-expect-error type resolution issue with bundler mode
 import parse from "html-react-parser";
-import DefaultLayout from "../../components/layout/DefaultLayout";
-import db from "../../utils/db";
-import Post from "../../models/Post";
-import Share from "../../components/common/Share";
+import DefaultLayout from "../components/layout/DefaultLayout";
+import db from "../utils/db";
+import Post from "../models/Post";
+import Share from "../components/common/Share";
 import Link from "next/link";
 import Image from "next/image";
-import { trimText } from "../../utils/helper";
+import { trimText } from "../utils/helper";
 
 type PostData = {
   id: string;
@@ -61,17 +58,41 @@ type MetaData = {
 type Props = {
   post?: PostData;
   meta?: MetaData;
-  debugSlug?: string;
 };
 
 const host = process.env.NEXT_PUBLIC_HOST || "https://greenlahome.vn";
-const defaultImage = `${host}/images/noi-that-1.jpg`;
+
+const normalizeImageUrl = (imageUrl: string | undefined, baseUrl: string): string => {
+  if (!imageUrl) return `${baseUrl}/images/noi-that-1.jpg`;
+  if (imageUrl.startsWith("http://") || imageUrl.startsWith("https://")) {
+    return imageUrl;
+  }
+  return `${baseUrl}${imageUrl.startsWith("/") ? imageUrl : `/${imageUrl}`}`;
+};
 
 const getPostHref = (post: { slug: string; isDirectPost?: boolean }) =>
   post.isDirectPost ? `/${post.slug}` : `/bai-viet/${post.slug}`;
 
-const SinglePost: NextPage<Props> = ({ post, meta }) => {
-  // Add null/undefined checks to prevent errors
+const processPostContent = (content: string) => {
+  if (!content) return content;
+
+  return content.replace(
+    /(<figure[^>]*>[\s\S]*?<\/figure>)|<img([^>]*)>/gi,
+    (match, figureTag, imgAttrs) => {
+      if (figureTag || !imgAttrs) return match;
+
+      const showCaptionMatch = imgAttrs.match(/data-show-caption=["']true["']/i);
+      if (!showCaptionMatch) return match;
+
+      const altMatch = imgAttrs.match(/alt=["']([^"']+)["']/i);
+      if (!altMatch || !altMatch[1]) return match;
+
+      return `<figure><img${imgAttrs}><figcaption>${altMatch[1]}</figcaption></figure>`;
+    }
+  );
+};
+
+const DirectPost: NextPage<Props> = ({ post, meta }) => {
   if (!post) {
     return (
       <DefaultLayout>
@@ -79,8 +100,8 @@ const SinglePost: NextPage<Props> = ({ post, meta }) => {
           <div className="text-center mt-[100px]">
             <h1 className="text-2xl font-bold text-gray-800">Bài viết không tồn tại</h1>
             <p className="text-gray-600 mt-2">Bài viết bạn đang tìm kiếm không tồn tại hoặc đã bị xóa.</p>
-            <Link href="/bai-viet" className="text-blue-600 hover:text-blue-800 mt-4 inline-block">
-              ← Quay lại danh sách bài viết
+            <Link href="/" className="text-blue-600 hover:text-blue-800 mt-4 inline-block">
+              ← Quay lại trang chủ
             </Link>
           </div>
         </div>
@@ -88,60 +109,22 @@ const SinglePost: NextPage<Props> = ({ post, meta }) => {
     );
   }
 
-  const { title, content, meta: postMeta, slug, thumbnail, category, createdAt, recentPosts } = post;
-
-  // Xử lý content để thêm figcaption cho ảnh có data-show-caption="true"
-  const processedContent = (() => {
-    if (!content) return content;
-
-    let processed = content;
-
-    // Tìm tất cả các thẻ img (không nằm trong figure)
-    // Regex này sẽ match img không nằm trong figure tag
-    processed = processed.replace(
-      /(<figure[^>]*>[\s\S]*?<\/figure>)|<img([^>]*)>/gi,
-      (match, figureTag, imgAttrs) => {
-        // Nếu là figure tag thì giữ nguyên
-        if (figureTag) {
-          return match;
-        }
-
-        // Xử lý img tag
-        if (!imgAttrs) return match;
-
-        // Kiểm tra xem có data-show-caption="true" không
-        const showCaptionMatch = imgAttrs.match(/data-show-caption=["']true["']/i);
-        if (!showCaptionMatch) {
-          return match; // Không có data-show-caption="true", giữ nguyên
-        }
-
-        // Lấy alt text
-        const altMatch = imgAttrs.match(/alt=["']([^"']+)["']/i);
-        if (!altMatch || !altMatch[1]) {
-          return match; // Không có alt text, giữ nguyên
-        }
-
-        const altText = altMatch[1];
-
-        // Bọc ảnh trong figure và thêm figcaption
-        return `<figure><img${imgAttrs}><figcaption>${altText}</figcaption></figure>`;
-      }
-    );
-
-    return processed;
-  })();
+  const { title, content, slug, category, recentPosts } = post;
+  const processedContent = processPostContent(content);
 
   return (
-    <DefaultLayout>
+    <DefaultLayout
+      title={meta?.title}
+      desc={meta?.description}
+      thumbnail={meta?.og?.image}
+    >
       <div className="container mx-auto px-4 py-8">
         <div className="flex flex-col md:flex-row">
-          {/* Main Content - 75% width on md and up */}
           <div className="w-full md:w-3/4 pr-0 md:pr-4 mb-4 md:mb-0 overflow-visible">
             <div className="md:pb-20 pb-6 container mx-auto mt-[60px] sm:mt-[91px]">
-              {/* Breadcrumb */}
               <div className="flex font-bold gap-2 text-base text-gray-600">
-                <Link href="/bai-viet" className="hover:text-blue-800 whitespace-nowrap">
-                  Bài viết
+                <Link href="/" className="hover:text-blue-800 whitespace-nowrap">
+                  Trang chủ
                 </Link>
                 <span>›</span>
                 <span className="flex font-bold gap-2 mb-4 text-base text-gray-600">
@@ -149,13 +132,13 @@ const SinglePost: NextPage<Props> = ({ post, meta }) => {
                 </span>
               </div>
 
-              {/* Tiêu đề bài viết */}
               <h1 className="md:text-3xl text-xl font-bold text-primary-dark dark:text-primary">
                 {title}
               </h1>
               <div className="mt-2 mb-2">
-                <Share url={`${host}/bai-viet/${slug}`} />
+                <Share url={`${host}/${slug}`} />
               </div>
+
               <div className="blog prose prose-lg dark:prose-invert [&_img]:mx-auto overflow-visible">
                 <style jsx>{`
                   .blog {
@@ -195,8 +178,7 @@ const SinglePost: NextPage<Props> = ({ post, meta }) => {
             </div>
           </div>
 
-          {/* Recent Posts Section - 25% width on md and up */}
-          <div className="w-full md:w-1/4 px-0.5  pl-3">
+          <div className="w-full md:w-1/4 px-0.5 pl-3">
             <div className="pt-5 md:mt-[91px]">
               <p className="text-3xl font-bold text-primary-dark dark:text-primary p-2 mb-4">
                 Bài viết gần đây
@@ -219,22 +201,6 @@ const SinglePost: NextPage<Props> = ({ post, meta }) => {
                           {p.title}
                         </span>
                         <div className="text-base flex items-center mt-1 gap-2">
-                          <span className=" text-orange-700">
-                            <svg
-                              className="w-4 h-4 mr-1"
-                              fill="none"
-                              stroke="currentColor"
-                              viewBox="0 0 24 24"
-                              xmlns="http://www.w3.org/2000/svg"
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth="2"
-                                d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
-                              ></path>
-                            </svg>
-                          </span>
                           <span className="text-gray-500">
                             {new Date(p.createdAt).toLocaleDateString("vi-VN", {
                               day: "numeric",
@@ -258,20 +224,7 @@ const SinglePost: NextPage<Props> = ({ post, meta }) => {
   );
 };
 
-export default SinglePost;
-
-// Helper function to normalize image URL
-const normalizeImageUrl = (imageUrl: string | undefined, baseUrl: string): string => {
-  if (!imageUrl) return `${baseUrl}/images/noi-that-1.jpg`;
-
-  // Check if URL is already absolute (starts with http:// or https://)
-  if (imageUrl.startsWith('http://') || imageUrl.startsWith('https://')) {
-    return imageUrl;
-  }
-
-  // If relative path, prepend baseUrl
-  return `${baseUrl}${imageUrl.startsWith('/') ? imageUrl : `/${imageUrl}`}`;
-};
+export default DirectPost;
 
 export const getServerSideProps: GetServerSideProps<
   { post?: PostData; meta?: MetaData },
@@ -281,124 +234,84 @@ export const getServerSideProps: GetServerSideProps<
     await db.connectDb();
     const baseUrl = process.env.NEXT_PUBLIC_HOST || "https://greenlahome.vn";
 
-    // Chỉ lấy bài viết đã publish (không phải nháp) và chưa bị xóa
     const post = await Post.findOne({
       slug: params?.slug,
+      isDirectPost: { $in: [true, "true", "1", 1] },
       isDraft: { $ne: true },
-      $or: [{ deletedAt: null }, { deletedAt: { $exists: false } }]
+      $or: [{ deletedAt: null }, { deletedAt: { $exists: false } }],
     });
 
     if (!post) {
-      console.log(`Post not found for slug: ${params?.slug}`);
-      const errorMeta: MetaData = {
-        title: `Bài viết không tồn tại (${params?.slug}) | Greenla Home`,
-        description: `Chúng tôi không tìm thấy bài viết với slug: ${params?.slug}. Hãy kiểm tra lại đường dẫn.`,
-        keywords: "bài viết không tồn tại, thiết kế nội thất, Greenla Home",
-        robots: "noindex, follow",
-        author: "Greenla Home",
-        canonical: `${baseUrl}/bai-viet`,
-        og: {
-          title: "Bài viết không tồn tại | Greenla Home",
-          description: `Không tìm thấy slug: ${params?.slug}`,
-          type: "website",
-          image: `${baseUrl}/images/noi-that-1.jpg`,
-          imageWidth: "1200",
-          imageHeight: "630",
-          url: `${baseUrl}/bai-viet`,
-          siteName: "Greenla Home",
-        },
-        twitter: {
-          card: "summary_large_image",
-          title: "Bài viết không tồn tại | Greenla Home",
-          description: `Không tìm thấy slug: ${params?.slug}`,
-          image: `${baseUrl}/images/noi-that-1.jpg`,
-        },
-      };
-      return {
-        props: {
-          meta: errorMeta,
-          debugSlug: params?.slug || "MISSING"
-        }
-      };
+      return { notFound: true };
     }
 
-    // Chỉ lấy các bài viết đã publish và chưa bị xóa cho recent posts
     const posts = await Post.find({
       _id: { $ne: post._id },
       isDraft: { $ne: true },
-      $or: [{ deletedAt: null }, { deletedAt: { $exists: false } }]
+      $or: [{ deletedAt: null }, { deletedAt: { $exists: false } }],
     })
       .sort({ createdAt: -1 })
       .limit(5)
       .select("slug title thumbnail category createdAt isDirectPost");
 
-    const recentPosts = posts.map((p) => {
-      // Normalize thumbnail URL giống như bài viết chính
-      const thumbUrl = p.thumbnail?.url;
-      const normalizedThumbnail = normalizeImageUrl(thumbUrl, baseUrl);
-
-      return {
-        id: p._id.toString(),
-        title: p.title,
-        slug: p.slug,
-        category: p.category || "Uncategorized",
-        thumbnail: normalizedThumbnail,
-        createdAt: p.createdAt.toString(),
-        isDirectPost: p.isDirectPost || false,
-      };
-    });
+    const recentPosts = posts.map((p) => ({
+      id: p._id.toString(),
+      title: p.title,
+      slug: p.slug,
+      category: p.category || "Uncategorized",
+      thumbnail: normalizeImageUrl(p.thumbnail?.url, baseUrl),
+      createdAt: p.createdAt.toString(),
+      isDirectPost: p.isDirectPost || false,
+    }));
 
     const { _id, title, content, meta, slug, tags, thumbnail, category, createdAt } = post;
     const thumbnailUrl = normalizeImageUrl(thumbnail?.url, baseUrl);
-
-    const truncatedDescription = trimText(meta, 160) || `Đọc bài viết "${title}" về thiết kế nội thất từ chuyên gia Greenla Home. Kiến thức chuyên môn, xu hướng thiết kế mới nhất, giúp bạn tạo không gian sống hoàn hảo.`;
+    const truncatedDescription = trimText(meta, 160) || `Đọc bài viết "${title}" từ GreenLa Home.`;
 
     const metaData: MetaData = {
-      title: `${title} | Greenla Home`,
+      title: `${title} | GreenLa Home`,
       description: truncatedDescription,
-      keywords: `${title}, thiết kế nội thất, Greenla Home, kiến trúc, trang trí nhà, xu hướng thiết kế, ${category}`,
+      keywords: `${title}, thiết kế nội thất, GreenLa Home, kiến trúc, trang trí nhà, ${category}`,
       robots: "index, follow",
-      author: "Greenla Home",
-      canonical: `${baseUrl}/bai-viet/${slug}`,
+      author: "GreenLa Home",
+      canonical: `${baseUrl}/${slug}`,
       og: {
-        title: `${title} | Greenla Home`,
+        title: `${title} | GreenLa Home`,
         description: truncatedDescription,
         type: "article",
         image: thumbnailUrl,
         imageWidth: "1200",
         imageHeight: "630",
-        url: `${baseUrl}/bai-viet/${slug}`,
-        siteName: "Greenla Home",
+        url: `${baseUrl}/${slug}`,
+        siteName: "GreenLa Home",
       },
       twitter: {
         card: "summary_large_image",
-        title: `${title} | Greenla Home`,
+        title: `${title} | GreenLa Home`,
         description: truncatedDescription,
         image: thumbnailUrl,
       },
     };
 
-    const postData: PostData = {
-      id: _id.toString(),
-      title,
-      content,
-      meta,
-      slug,
-      tags,
-      category: category || "Uncategorized",
-      thumbnail: thumbnail?.url || "",
-      createdAt: createdAt.toString(),
-      recentPosts,
-    };
-
     return {
       props: {
-        post: postData,
+        post: {
+          id: _id.toString(),
+          title,
+          content,
+          meta,
+          slug,
+          tags,
+          category: category || "Uncategorized",
+          thumbnail: thumbnailUrl,
+          createdAt: createdAt.toString(),
+          recentPosts,
+        },
         meta: metaData,
       },
     };
   } catch (error) {
-    console.error("Error in getServerSideProps:", error);
+    console.error("Error in getServerSideProps (direct post):", error);
     return { notFound: true };
   }
 };
