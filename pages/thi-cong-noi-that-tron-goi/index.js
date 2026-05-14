@@ -269,7 +269,7 @@ export default function ThiCongNoiThatGoCongNghiep({ relatedPosts, meta }) {
               {relatedPosts.map((post, index) => (
                 <div key={index} className="flex flex-col">
                   {post.thumbnail && (
-                    <div className="w-full h-32 relative">
+                    <div className="w-full h-56 relative">
                       <Image
                         src={post.thumbnail}
                         alt={post.title}

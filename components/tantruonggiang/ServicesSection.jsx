@@ -24,60 +24,49 @@ export default function ServicesSection() {
   ];
 
   return (
-    <section className="bg-q8-primary-50 py-10 md:py-10 overflow-hidden"
-      style={{
-        backgroundImage: "url('/images/section-bg-shape-1.svg')",
-        backgroundRepeat: "no-repeat",
-        backgroundPosition: "left center",
-        backgroundSize: "contain",
-      }}>
+    <section className="py-12 md:py-16">
       <div className="container mx-auto px-4">
-        {/* Header Section: Split Layout */}
-        <div className="flex flex-col lg:flex-row gap-10 lg:gap-20 mb-0 md:mb-10">
-          <div className="">
-            <div className="inline-block px-4 py-1.5 bg-green-50 border border-green-100 rounded-full mb-6">
-              <span className="text-xs font-bold text-green-600 uppercase tracking-widest">
-                Dịch Vụ Tại GreenLaHome
-              </span>
-            </div>
-            <p className="text-gray-500 hidden md:block text-lg md:text-xl leading-relaxed  border-l-4 border-green-500 pl-6 py-2">
-              <span className="font-bold">GREENLAHOME</span> chuyên thiết kế, thi công nội thất theo phong cách hiện đại dành cho căn hộ, nhà phố và biệt thự. <br /> Chúng tôi ứng dụng công nghệ AI trong thiết kế nhằm tối ưu theo nhu cầu và gu thẩm mỹ riêng của từng khách hàng.
-            </p>
-          </div>
-
+        <div className="mx-auto mb-8 max-w-5xl text-center md:mb-12">
+          <span className="inline-flex rounded-full border border-green-200 bg-white px-4 py-2 text-xs font-bold uppercase tracking-widest text-green-700 shadow-sm">
+            Dịch vụ tại GreenLaHome
+          </span>
+          <h2 className="mt-4 text-3xl font-bold leading-tight text-gray-950 md:text-4xl">
+            Giải pháp nội thất hiện đại, tinh gọn và đúng nhu cầu
+          </h2>
         </div>
 
-        {/* Services Cards Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 gap-5 md:grid-cols-3 lg:gap-6">
           {services.map((service, index) => (
-            <Link href={service.link} key={index} className="group">
-              <div className="bg-white p-10 rounded-[40px] shadow-[0_10px_50px_rgba(0,0,0,0.03)] border border-gray-100 h-full transition-all duration-500 hover:shadow-[0_20px_70px_rgba(34,197,94,0.1)] hover:-translate-y-2 relative overflow-hidden">
-                {/* Background Decor */}
-
-                <div className="flex justify-between items-center mb-4">
-                  <h3 className="text-2xl font-bold text-gray-900 leading-tight group-hover:text-green-600 transition-colors duration-300 pr-5">
-                    {service.title}
-                  </h3>
-                  <div className="w-12 h-12 flex items-center justify-center rounded-2xl bg-gray-50 text-green-600 group-hover:bg-green-600 group-hover:text-white transition-all duration-500">
+            <Link href={service.link} key={index} className="group block h-full">
+              <article className="flex h-full flex-col rounded-2xl border border-gray-100 bg-white p-6 shadow-[0_12px_40px_rgba(15,23,42,0.06)] transition duration-300 hover:-translate-y-1 hover:border-green-200 hover:shadow-[0_18px_50px_rgba(15,23,42,0.1)] md:p-7">
+                <div className="mb-6 flex items-center justify-between gap-4">
+                  <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-green-50 text-green-700 transition duration-300 group-hover:bg-green-600 group-hover:text-white">
                     {service.icon}
                   </div>
+                  <span className="text-sm font-semibold text-gray-300">
+                    0{index + 1}
+                  </span>
                 </div>
 
-                <div className="w-full h-[1px] bg-gray-100 mb-8 relative">
-                  <div className="absolute top-0 left-0 h-full w-0 bg-green-500 group-hover:w-full transition-all duration-700"></div>
+                <h3 className="text-xl font-bold leading-snug text-gray-950 transition duration-300 group-hover:text-green-700">
+                  {service.title}
+                </h3>
+
+                <div className="my-5 h-px w-full bg-gray-100">
+                  <div className="h-px w-12 bg-green-500 transition-all duration-300 group-hover:w-24" />
                 </div>
 
-                <p className="text-gray-500 leading-relaxed mb-8">
+                <p className="mb-6 flex-1 text-sm leading-7 text-gray-600 md:text-base">
                   {service.description}
                 </p>
 
-                <div className="flex items-center gap-2 text-sm font-bold text-green-600 opacity-0 group-hover:opacity-100 transition-all duration-500 translate-x-[-10px] group-hover:translate-x-0">
-                  <span>Khám phá ngay</span>
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div className="inline-flex items-center gap-2 text-sm font-bold text-green-700">
+                  <span>Xem chi tiết</span>
+                  <svg className="h-4 w-4 transition duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
                   </svg>
                 </div>
-              </div>
+              </article>
             </Link>
           ))}
         </div>

@@ -60,6 +60,7 @@ type MetaData = {
 type Props = {
   post?: PostData;
   meta?: MetaData;
+  debugSlug?: string;
 };
 
 const host = process.env.NEXT_PUBLIC_HOST || "https://greenlahome.vn";
@@ -88,9 +89,9 @@ const SinglePost: NextPage<Props> = ({ post, meta }) => {
   // Xử lý content để thêm figcaption cho ảnh có data-show-caption="true"
   const processedContent = (() => {
     if (!content) return content;
-    
+
     let processed = content;
-    
+
     // Tìm tất cả các thẻ img (không nằm trong figure)
     // Regex này sẽ match img không nằm trong figure tag
     processed = processed.replace(
@@ -100,29 +101,29 @@ const SinglePost: NextPage<Props> = ({ post, meta }) => {
         if (figureTag) {
           return match;
         }
-        
+
         // Xử lý img tag
         if (!imgAttrs) return match;
-        
+
         // Kiểm tra xem có data-show-caption="true" không
         const showCaptionMatch = imgAttrs.match(/data-show-caption=["']true["']/i);
         if (!showCaptionMatch) {
           return match; // Không có data-show-caption="true", giữ nguyên
         }
-        
+
         // Lấy alt text
         const altMatch = imgAttrs.match(/alt=["']([^"']+)["']/i);
         if (!altMatch || !altMatch[1]) {
           return match; // Không có alt text, giữ nguyên
         }
-        
+
         const altText = altMatch[1];
-        
+
         // Bọc ảnh trong figure và thêm figcaption
         return `<figure><img${imgAttrs}><figcaption>${altText}</figcaption></figure>`;
       }
     );
-    
+
     return processed;
   })();
 
@@ -261,12 +262,12 @@ export default SinglePost;
 // Helper function to normalize image URL
 const normalizeImageUrl = (imageUrl: string | undefined, baseUrl: string): string => {
   if (!imageUrl) return `${baseUrl}/images/noi-that-1.jpg`;
-  
+
   // Check if URL is already absolute (starts with http:// or https://)
   if (imageUrl.startsWith('http://') || imageUrl.startsWith('https://')) {
     return imageUrl;
   }
-  
+
   // If relative path, prepend baseUrl
   return `${baseUrl}${imageUrl.startsWith('/') ? imageUrl : `/${imageUrl}`}`;
 };
@@ -280,24 +281,24 @@ export const getServerSideProps: GetServerSideProps<
     const baseUrl = process.env.NEXT_PUBLIC_HOST || "https://greenlahome.vn";
 
     // Chỉ lấy bài viết đã publish (không phải nháp) và chưa bị xóa
-    const post = await Post.findOne({ 
-      slug: params?.slug,
-      isDraft: false,
-      deletedAt: null
+    console.log("DEBUG: Fetching post for slug:", params?.slug);
+    const post = await Post.findOne({
+      slug: params?.slug
     });
+    console.log("DEBUG: Post found:", post ? post.title : "NULL");
 
     if (!post) {
       console.log(`Post not found for slug: ${params?.slug}`);
       const errorMeta: MetaData = {
-        title: "Bài viết không tồn tại | Greenla Home",
-        description: "Bài viết bạn đang tìm kiếm không tồn tại hoặc đã bị xóa. Hãy xem các bài viết khác về thiết kế nội thất từ Greenla Home.",
-        keywords: "bài viết không tồn tại, thiết kế nội thất, Greenla Home, kiến trúc, trang trí nhà",
+        title: `Bài viết không tồn tại (${params?.slug}) | Greenla Home`,
+        description: `Chúng tôi không tìm thấy bài viết với slug: ${params?.slug}. Hãy kiểm tra lại đường dẫn.`,
+        keywords: "bài viết không tồn tại, thiết kế nội thất, Greenla Home",
         robots: "noindex, follow",
         author: "Greenla Home",
         canonical: `${baseUrl}/bai-viet`,
         og: {
           title: "Bài viết không tồn tại | Greenla Home",
-          description: "Bài viết bạn đang tìm kiếm không tồn tại hoặc đã bị xóa",
+          description: `Không tìm thấy slug: ${params?.slug}`,
           type: "website",
           image: `${baseUrl}/images/noi-that-1.jpg`,
           imageWidth: "1200",
@@ -308,22 +309,23 @@ export const getServerSideProps: GetServerSideProps<
         twitter: {
           card: "summary_large_image",
           title: "Bài viết không tồn tại | Greenla Home",
-          description: "Bài viết bạn đang tìm kiếm không tồn tại hoặc đã bị xóa",
+          description: `Không tìm thấy slug: ${params?.slug}`,
           image: `${baseUrl}/images/noi-that-1.jpg`,
         },
       };
-      return { 
+      return {
         props: {
-          meta: errorMeta
-        } 
+          meta: errorMeta,
+          debugSlug: params?.slug || "MISSING"
+        }
       };
     }
 
     // Chỉ lấy các bài viết đã publish và chưa bị xóa cho recent posts
     const posts = await Post.find({
       _id: { $ne: post._id },
-      isDraft: false,
-      deletedAt: null
+      isDraft: { $ne: true },
+      $or: [{ deletedAt: null }, { deletedAt: { $exists: false } }]
     })
       .sort({ createdAt: -1 })
       .limit(5)
@@ -333,7 +335,7 @@ export const getServerSideProps: GetServerSideProps<
       // Normalize thumbnail URL giống như bài viết chính
       const thumbUrl = p.thumbnail?.url;
       const normalizedThumbnail = normalizeImageUrl(thumbUrl, baseUrl);
-      
+
       return {
         id: p._id.toString(),
         title: p.title,

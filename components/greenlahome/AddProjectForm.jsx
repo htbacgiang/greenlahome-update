@@ -567,7 +567,7 @@ export default function AddProjectForm({ onSuccess, editingProject = null }) {
             >
               <option value="Đang thi công">Đang thi công</option>
               <option value="Hoàn thành">Hoàn thành</option>
-              <option value="Thiết kế">Thiết kế</option>
+              <option value="Đang thiết kế">Đang thiết kế</option>
             </select>
           </div>
         </div>
@@ -615,66 +615,71 @@ export default function AddProjectForm({ onSuccess, editingProject = null }) {
               Nhập tỷ lệ ảnh (width x height) để hiển thị đúng trong album. Ví dụ: 6x4, 4x6, 4x4, 16x9
             </p>
             {images.slice(1).map((img, index) => (
-              <div key={index + 1} className="flex gap-2 mb-3 items-start flex-wrap">
-                <input
-                  type="text"
-                  value={img.src}
-                  onChange={(e) => handleImageUrlChange(index + 1, e.target.value)}
-                  className="flex-1 min-w-[200px] px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  placeholder={`/images/projects/gallery-${index + 1}.jpg`}
-                />
-                <div className="flex gap-2 items-center">
-                  <label className="text-sm text-gray-600">Width:</label>
+              <div key={index + 1} className="grid grid-cols-1 xl:grid-cols-12 gap-3 mb-4 p-4 bg-gray-50 rounded-xl border border-gray-100 items-center">
+                <div className="xl:col-span-5">
+                  <input
+                    type="text"
+                    value={img.src}
+                    onChange={(e) => handleImageUrlChange(index + 1, e.target.value)}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    placeholder={`/images/projects/gallery-${index + 1}.jpg`}
+                  />
+                </div>
+                <div className="xl:col-span-2 flex items-center gap-2">
                   <input
                     type="number"
                     value={img.width || 16}
                     onChange={(e) => handleWidthChange(index + 1, e.target.value)}
-                    className="w-16 px-2 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+                    className="w-full px-2 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
                     min="1"
                   />
-                  <label className="text-sm text-gray-600">x</label>
-                  <label className="text-sm text-gray-600">Height:</label>
+                  <span className="text-gray-400">x</span>
                   <input
                     type="number"
                     value={img.height || 9}
                     onChange={(e) => handleHeightChange(index + 1, e.target.value)}
-                    className="w-16 px-2 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+                    className="w-full px-2 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
                     min="1"
                   />
                 </div>
-                <select
-                  value={img.aspectRatio || 'landscape'}
-                  onChange={(e) => handleAspectRatioChange(index + 1, e.target.value)}
-                  className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
-                  title="Chọn tỷ lệ nhanh (sẽ tự động cập nhật width/height)"
-                >
-                  <option value="landscape">Ảnh ngang (16:9)</option>
-                  <option value="landscape-3-4">Ảnh ngang (4:3)</option>
-                  <option value="square">Ảnh vuông (1:1)</option>
-                  <option value="portrait">Ảnh dọc (3:4)</option>
-                </select>
-                {img.src && (
-                  <div className={`border border-gray-300 rounded-lg overflow-hidden ${
-                    img.aspectRatio === 'square' ? 'w-16 h-16' : 
-                    img.aspectRatio === 'portrait' ? 'w-12 h-16' : 
-                    img.aspectRatio === 'landscape-3-4' ? 'w-16 h-12' :
-                    'w-20 h-12'
-                  }`}>
-                    <Image
-                      src={img.src}
-                      alt={`Preview ${index + 2}`}
-                      fill
-                      className="object-cover"
-                    />
-                  </div>
-                )}
-                <button
-                  type="button"
-                  onClick={() => handleRemoveImage(index + 1)}
-                  className="px-3 py-2 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition-colors"
-                >
-                  <X size={20} />
-                </button>
+                <div className="xl:col-span-2">
+                  <select
+                    value={img.aspectRatio || 'landscape'}
+                    onChange={(e) => handleAspectRatioChange(index + 1, e.target.value)}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+                  >
+                    <option value="landscape">Ảnh ngang (16:9)</option>
+                    <option value="landscape-3-4">Ảnh ngang (4:3)</option>
+                    <option value="square">Ảnh vuông (1:1)</option>
+                    <option value="portrait">Ảnh dọc (3:4)</option>
+                  </select>
+                </div>
+                <div className="xl:col-span-2 flex justify-center">
+                  {img.src && (
+                    <div className={`relative border border-gray-300 rounded-lg overflow-hidden ${
+                      img.aspectRatio === 'square' ? 'w-16 h-16' : 
+                      img.aspectRatio === 'portrait' ? 'w-12 h-16' : 
+                      img.aspectRatio === 'landscape-3-4' ? 'w-16 h-12' :
+                      'w-24 h-14'
+                    }`}>
+                      <Image
+                        src={img.src}
+                        alt={`Preview ${index + 2}`}
+                        fill
+                        className="object-cover"
+                      />
+                    </div>
+                  )}
+                </div>
+                <div className="xl:col-span-1 flex justify-end">
+                  <button
+                    type="button"
+                    onClick={() => handleRemoveImage(index + 1)}
+                    className="p-2 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition-colors"
+                  >
+                    <X size={20} />
+                  </button>
+                </div>
               </div>
             ))}
             <button

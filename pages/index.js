@@ -1,5 +1,6 @@
 // pages/index.js
 import Head from "next/head";
+import Link from "next/link";
 import DefaultLayout from "../components/layout/DefaultLayout";
 import BannerTTG from "../components/tantruonggiang/BannerTTG";
 import ServicesSection from "../components/tantruonggiang/ServicesSection";
@@ -174,6 +175,14 @@ export default function Home({ posts, meta }) {
             {posts.map((post) => (
               <PostCard key={post.slug} post={post} />
             ))}
+          </div>
+          <div className="mt-8 flex justify-center">
+            <Link
+              href="/bai-viet"
+              className="inline-flex items-center justify-center rounded-full bg-green-700 px-6 py-3 text-sm font-bold text-white shadow-sm transition duration-300 hover:bg-green-800 hover:shadow-md"
+            >
+              Xem thêm bài viết
+            </Link>
           </div>
         </div>
       </div>

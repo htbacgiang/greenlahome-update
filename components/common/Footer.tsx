@@ -117,7 +117,7 @@ export default function Footer() {
             <h4 className="text-lg font-semibold mb-4">Bản Đồ</h4>
             <div className="relative h-40 rounded-lg overflow-hidden">
               <iframe
-                src="https://www.google.com/maps/embed?pb=!1m17!1m12!1m3!1d6832.190600280168!2d105.73607760655545!3d20.981865785614055!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m2!1m1!2s!5e0!3m2!1svi!2s!4v1743957236803!5m2!1svi!2s"
+                src="https://www.google.com/maps?q=20.9879366,105.7391281&z=17&output=embed"
                 width="100%"
                 height="100%"
                 style={{ border: 0 }}
@@ -127,7 +127,7 @@ export default function Footer() {
               ></iframe>
               <div className="absolute inset-0 bg-black bg-opacity-30 flex items-center justify-center">
                 <a
-                  href="https://maps.app.goo.gl/eco-baogiang"
+                  href="https://maps.app.goo.gl/gNNyDQ5RETwgPAUr9"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-white hover:text-orange-500"

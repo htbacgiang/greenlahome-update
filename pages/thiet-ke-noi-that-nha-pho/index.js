@@ -39,7 +39,7 @@ export default function ThietKeNoiThatNhaPho({ relatedPosts, meta }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     if (!validateForm()) return;
 
     setStatus("Đang gửi...");
@@ -168,36 +168,36 @@ export default function ThietKeNoiThatNhaPho({ relatedPosts, meta }) {
 
   return (
     <DefaultLayout>
-       <Head>
-              <title>{safeMeta.title}</title>
-              <meta name="description" content={safeMeta.description} />
-              <meta name="keywords" content={safeMeta.keywords} />
-              <meta name="robots" content={safeMeta.robots} />
-              <meta name="author" content={safeMeta.author} />
-              <link rel="canonical" href={safeMeta.canonical} />
-              <meta property="og:title" content={safeMeta.og.title} />
-              <meta property="og:description" content={safeMeta.og.description} />
-              <meta property="og:type" content={safeMeta.og.type} />
-              <meta property="og:image" content={safeMeta.og.image} />
-              <meta property="og:image:width" content={safeMeta.og.imageWidth} />
-              <meta property="og:image:height" content={safeMeta.og.imageHeight} />
-              <meta property="og:url" content={safeMeta.og.url} />
-              <meta property="og:site_name" content={safeMeta.og.siteName} />
-              <meta property="og:locale" content={safeMeta.og.locale} />
-              <meta name="twitter:card" content={safeMeta.twitter.card} />
-              <meta name="twitter:title" content={safeMeta.twitter.title} />
-              <meta name="twitter:description" content={safeMeta.twitter.description} />
-              <meta name="twitter:image" content={safeMeta.twitter.image} />
-              <meta name="twitter:site" content={safeMeta.twitter.site} />
-              <script
-                type="application/ld+json"
-                dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
-              />
-              <script
-                type="application/ld+json"
-                dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceSchema) }}
-              />
-            </Head>
+      <Head>
+        <title>{safeMeta.title}</title>
+        <meta name="description" content={safeMeta.description} />
+        <meta name="keywords" content={safeMeta.keywords} />
+        <meta name="robots" content={safeMeta.robots} />
+        <meta name="author" content={safeMeta.author} />
+        <link rel="canonical" href={safeMeta.canonical} />
+        <meta property="og:title" content={safeMeta.og.title} />
+        <meta property="og:description" content={safeMeta.og.description} />
+        <meta property="og:type" content={safeMeta.og.type} />
+        <meta property="og:image" content={safeMeta.og.image} />
+        <meta property="og:image:width" content={safeMeta.og.imageWidth} />
+        <meta property="og:image:height" content={safeMeta.og.imageHeight} />
+        <meta property="og:url" content={safeMeta.og.url} />
+        <meta property="og:site_name" content={safeMeta.og.siteName} />
+        <meta property="og:locale" content={safeMeta.og.locale} />
+        <meta name="twitter:card" content={safeMeta.twitter.card} />
+        <meta name="twitter:title" content={safeMeta.twitter.title} />
+        <meta name="twitter:description" content={safeMeta.twitter.description} />
+        <meta name="twitter:image" content={safeMeta.twitter.image} />
+        <meta name="twitter:site" content={safeMeta.twitter.site} />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceSchema) }}
+        />
+      </Head>
       <div className="relative w-full h-[30vh] md:h-[40vh]">
         <Image
           src="/images/noi-that-1.jpg"
@@ -240,7 +240,7 @@ export default function ThietKeNoiThatNhaPho({ relatedPosts, meta }) {
               {relatedPosts.map((post, index) => (
                 <div key={index} className="flex flex-col">
                   {post.thumbnail && (
-                    <div className="w-full h-32 relative">
+                    <div className="w-full h-56 relative">
                       <Image
                         src={post.thumbnail}
                         alt={post.title}
@@ -274,9 +274,8 @@ export default function ThietKeNoiThatNhaPho({ relatedPosts, meta }) {
                     value={formData.name}
                     onChange={handleChange}
                     placeholder="Họ và tên *"
-                    className={`w-full p-3 bg-gray-700 text-white placeholder-white rounded-lg focus:outline-none focus:ring-2 focus:ring-[#4A3C31] ${
-                      errors.name ? "border-red-500" : "border-none"
-                    }`}
+                    className={`w-full p-3 bg-gray-700 text-white placeholder-white rounded-lg focus:outline-none focus:ring-2 focus:ring-[#4A3C31] ${errors.name ? "border-red-500" : "border-none"
+                      }`}
                     aria-invalid={!!errors.name}
                     aria-describedby={errors.name ? "name-error" : undefined}
                   />
@@ -293,9 +292,8 @@ export default function ThietKeNoiThatNhaPho({ relatedPosts, meta }) {
                     value={formData.phone}
                     onChange={handleChange}
                     placeholder="Số điện thoại *"
-                    className={`w-full p-3 bg-gray-700 text-white placeholder-white rounded-lg focus:outline-none focus:ring-2 focus:ring-[#4A3C31] ${
-                      errors.phone ? "border-red-500" : "border-none"
-                    }`}
+                    className={`w-full p-3 bg-gray-700 text-white placeholder-white rounded-lg focus:outline-none focus:ring-2 focus:ring-[#4A3C31] ${errors.phone ? "border-red-500" : "border-none"
+                      }`}
                     aria-invalid={!!errors.phone}
                     aria-describedby={errors.phone ? "phone-error" : undefined}
                   />
@@ -312,9 +310,8 @@ export default function ThietKeNoiThatNhaPho({ relatedPosts, meta }) {
                     value={formData.email}
                     onChange={handleChange}
                     placeholder="Email (tùy chọn)"
-                    className={`w-full p-3 bg-gray-700 text-white placeholder-white rounded-lg focus:outline-none focus:ring-2 focus:ring-[#4A3C31] ${
-                      errors.email ? "border-red-500" : "border-none"
-                    }`}
+                    className={`w-full p-3 bg-gray-700 text-white placeholder-white rounded-lg focus:outline-none focus:ring-2 focus:ring-[#4A3C31] ${errors.email ? "border-red-500" : "border-none"
+                      }`}
                     aria-invalid={!!errors.email}
                     aria-describedby={errors.email ? "email-error" : undefined}
                   />
@@ -330,9 +327,8 @@ export default function ThietKeNoiThatNhaPho({ relatedPosts, meta }) {
                     value={formData.message}
                     onChange={handleChange}
                     placeholder="Yêu cầu của bạn (tùy chọn)"
-                    className={`w-full p-3 bg-gray-700 text-white placeholder-white rounded-lg focus:outline-none focus:ring-2 focus:ring-[#4A3C31] ${
-                      errors.message ? "border-red-500" : "border-none"
-                    }`}
+                    className={`w-full p-3 bg-gray-700 text-white placeholder-white rounded-lg focus:outline-none focus:ring-2 focus:ring-[#4A3C31] ${errors.message ? "border-red-500" : "border-none"
+                      }`}
                     aria-invalid={!!errors.message}
                     aria-describedby={errors.message ? "message-error" : undefined}
                   />
@@ -350,9 +346,8 @@ export default function ThietKeNoiThatNhaPho({ relatedPosts, meta }) {
               </form>
               {status && (
                 <p
-                  className={`mt-2 text-center ${
-                    status.includes("thành công") ? "text-green-600" : "text-red-600"
-                  }`}
+                  className={`mt-2 text-center ${status.includes("thành công") ? "text-green-600" : "text-red-600"
+                    }`}
                 >
                   {status}
                 </p>

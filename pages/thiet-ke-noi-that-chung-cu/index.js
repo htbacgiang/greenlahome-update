@@ -242,7 +242,7 @@ export default function ThietKeNoiThatChungCu({ relatedPosts, meta }) {
               {relatedPosts.map((post, index) => (
                 <div key={index} className="flex flex-col">
                   {post.thumbnail && (
-                    <div className="w-full h-48 relative">
+                    <div className="w-full h-56 relative">
                       <Image
                         src={post.thumbnail}
                         alt={post.title}

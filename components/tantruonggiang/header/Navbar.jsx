@@ -112,13 +112,13 @@ export default function Navbar() {
               </div>
             </Link>
 
-            <div className="hidden lg:flex items-center space-x-8">
+            <div className="hidden lg:flex items-center space-x-8  font-bold">
               {navigationItems.map((item, index) => (
                 <div key={item._id || index} className="relative group">
                   {item.children && item.children.length > 0 ? (
                     <>
                       <button
-                        className={`flex items-center space-x-1 px-3 py-2 rounded-lg font-medium transition-all duration-300 ${isActivePath(item.href)
+                        className={`flex items-center space-x-1 px-3 py-2 rounded-lg font-bold  transition-all duration-300 ${isActivePath(item.href)
                           ? "q8-text-brand q8-bg-light"
                           : "q8-text-secondary hover:q8-text-brand hover:q8-bg-light"
                           }`}
@@ -127,31 +127,31 @@ export default function Navbar() {
                         <FaChevronDown className="text-xs transition-transform group-hover:rotate-180" />
                       </button>
 
-                      <div className="absolute top-full left-0 mt-2 w-64 bg-white rounded-2xl shadow-xl border border-gray-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform translate-y-2 group-hover:translate-y-0" style={{ overflow: 'visible' }}>
+                      <div className="absolute top-full left-0 mt-2 w-80 bg-white rounded-2xl shadow-xl border border-gray-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform translate-y-2 group-hover:translate-y-0" style={{ overflow: 'visible' }}>
                         <div className="p-2">
                           {item.children.map((child2, ci2) => (
                             <div key={child2._id || ci2} className="relative group/sub">
                               {child2.children && child2.children.length > 0 ? (
                                 <>
                                   <div
-                                    className="flex items-center justify-between px-4 py-3 q8-text-oslo-gray hover:q8-text-cod-gray cursor-default transition-colors duration-200"
+                                    className="flex items-center justify-between px-4 py-3 text-gray-700 hover:text-gray-900 cursor-default transition-colors duration-200"
                                     style={{ borderBottom: ci2 < item.children.length - 1 ? '1px solid #f3f4f6' : 'none' }}
                                   >
-                                    <span className="text-sm font-medium">{child2.name}</span>
+                                    <span className="text-sm font-bold ">{child2.name}</span>
                                     <svg xmlns="http://www.w3.org/2000/svg" className="w-3 h-3 text-green-500" fill="currentColor" viewBox="0 0 320 512">
                                       <path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z" />
                                     </svg>
                                   </div>
 
                                   <div className="absolute left-full top-0 ml-2 bg-white rounded-2xl shadow-2xl border border-gray-100 opacity-0 invisible group-hover/sub:opacity-100 group-hover/sub:visible transition-all duration-300 z-50 p-2"
-                                    style={{ minWidth: '260px' }}
+                                    style={{ minWidth: '300px' }}
                                   >
                                     <div className="grid grid-cols-1 gap-x-4 gap-y-1">
                                       {child2.children.map((child3, ci3) => (
                                         <Link
                                           key={child3._id || ci3}
                                           href={child3.href}
-                                          className="block text-sm text-gray-600 px-3 py-2 hover:bg-gray-50 rounded-xl hover:text-green-500 transition-colors duration-200 whitespace-nowrap"
+                                          className="block text-sm font-bold  text-gray-700 px-3 py-2 hover:bg-gray-50 rounded-xl hover:text-green-500 transition-colors duration-200 whitespace-nowrap"
                                         >
                                           {child3.name}
                                         </Link>
@@ -162,7 +162,7 @@ export default function Navbar() {
                               ) : (
                                 <Link
                                   href={child2.href}
-                                  className="flex items-center px-4 py-3 q8-text-oslo-gray hover:q8-text-cod-gray hover:q8-bg-alabaster rounded-xl transition-all duration-300"
+                                  className="flex items-center px-4 py-3 font-bold  text-gray-700 hover:text-gray-900 hover:bg-alabaster rounded-xl transition-all duration-300"
                                 >
                                   {child2.name}
                                 </Link>
@@ -175,9 +175,9 @@ export default function Navbar() {
                   ) : (
                     <Link
                       href={item.href}
-                      className={`px-3 py-2 rounded-lg font-medium transition-all duration-300 ${isActivePath(item.href)
+                      className={`px-3 py-2 rounded-lg font-bold  transition-all duration-300 ${isActivePath(item.href)
                         ? "q8-text-cod-gray q8-bg-alabaster"
-                        : "q8-text-oslo-gray hover:q8-text-cod-gray hover:q8-bg-alabaster"
+                        : "text-gray-700 hover:text-gray-900 hover:bg-alabaster"
                         }`}
                     >
                       {item.name}
@@ -240,7 +240,7 @@ export default function Navbar() {
                               <Icon className={`text-lg ${isActivePath(item.href) ? "text-green-600" : "text-gray-600"
                                 }`} />
                             </div>
-                            <span className="text-lg">{item.name}</span>
+                            <span className="text-lg ">{item.name}</span>
                           </div>
                           <FaChevronDown className={`text-sm transition-transform duration-300 ${activeDropdown === index ? "rotate-180" : ""
                             }`} />
@@ -256,9 +256,9 @@ export default function Navbar() {
                                   <>
                                     <button
                                       onClick={() => toggleSubDropdown(`${index}-${ci2}`)}
-                                      className="w-full flex items-center justify-between px-5 py-3 ml-3 text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-xl transition-all duration-300 border-l-2 border-gray-200"
+                                      className="w-full flex items-center justify-between px-5 py-3 ml-3 text-gray-700 hover:text-gray-900 hover:bg-gray-50 rounded-xl transition-all duration-300 border-l-2 border-gray-200"
                                     >
-                                      <span>{child2.name}</span>
+                                      <span className="font-bold ">{child2.name}</span>
                                       <FaChevronDown className={`text-xs transition-transform ${activeSubDropdown === `${index}-${ci2}` ? "rotate-180" : ""}`} />
                                     </button>
                                     <div className={`transition-all duration-300 overflow-hidden ${activeSubDropdown === `${index}-${ci2}` ? "max-h-96 opacity-100" : "max-h-0 opacity-0"}`}>
@@ -267,7 +267,7 @@ export default function Navbar() {
                                           <Link
                                             key={child3._id || ci3}
                                             href={child3.href}
-                                            className="block px-4 py-2 ml-3 text-gray-500 hover:text-gray-800 hover:bg-gray-50 rounded-lg text-sm border-l-2 border-gray-100"
+                                            className="block px-4 py-2 ml-3 text-gray-700 hover:text-gray-900 hover:bg-gray-50 rounded-lg text-sm font-bold  border-l-2 border-gray-100"
                                           >
                                             {child3.name}
                                           </Link>
@@ -278,7 +278,7 @@ export default function Navbar() {
                                 ) : (
                                   <Link
                                     href={child2.href}
-                                    className="block px-5 py-3 ml-3 text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-xl transition-all duration-300 border-l-2 border-gray-200 hover:border-green-300"
+                                    className="block px-5 py-3 ml-3 text-gray-700 hover:text-gray-900 hover:bg-gray-50 rounded-xl transition-all duration-300 font-bold  border-l-2 border-gray-200 hover:border-green-300"
                                   >
                                     {child2.name}
                                   </Link>
@@ -301,7 +301,7 @@ export default function Navbar() {
                           <Icon className={`text-lg ${isActivePath(item.href) ? "text-green-600" : "text-gray-600"
                             }`} />
                         </div>
-                        <span className="text-lg">{item.name}</span>
+                        <span className="text-lg ">{item.name}</span>
                       </Link>
                     )}
                   </div>
