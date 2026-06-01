@@ -1,9 +1,33 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { toast } from 'react-toastify';
-import { X, Plus } from 'lucide-react';
+import { X, Plus, Upload, ImageIcon, Loader2 } from 'lucide-react';
 import dynamic from 'next/dynamic';
 import Image from 'next/image';
 const Editor = dynamic(() => import('../editor/Editor'), { ssr: false });
+
+// Upload ảnh trực tiếp từ browser lên Cloudinary (không qua server)
+const CLOUD_NAME = 'dcgtt1jza';
+const UPLOAD_PRESET = 'greenlahome_unsigned';
+
+async function uploadToCloudinary(file) {
+  const formData = new FormData();
+  formData.append('file', file);
+  formData.append('upload_preset', UPLOAD_PRESET);
+  formData.append('folder', 'greenlahome');
+
+  const res = await fetch(`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`, {
+    method: 'POST',
+    body: formData,
+  });
+
+  if (!res.ok) {
+    const err = await res.json();
+    throw new Error(err.error?.message || 'Upload thất bại');
+  }
+
+  const data = await res.json();
+  return data.secure_url;
+}
 
 // Helper function to create slug from title
 const createSlug = (title) => {
@@ -26,6 +50,11 @@ export default function AddProjectForm({ onSuccess, editingProject = null }) {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const isEditMode = !!editingProject;
+  const [isUploadingMain, setIsUploadingMain] = useState(false);
+  const [isUploadingGallery, setIsUploadingGallery] = useState(false);
+  const mainImageInputRef = useRef(null);
+  const galleryInputRef = useRef(null);
+  const uploadQueue = [];
   
   // Images state - with width/height support
   const [images, setImages] = useState([
@@ -142,21 +171,6 @@ export default function AddProjectForm({ onSuccess, editingProject = null }) {
     }));
   };
 
-  // Handle image URL change
-  const handleImageUrlChange = (index, url) => {
-    setImages(prevImages => {
-      const newImages = [...prevImages];
-      if (!newImages[index]) {
-        newImages[index] = { src: '', color: '#000000', aspectRatio: 'landscape', width: 16, height: 9 };
-      }
-      newImages[index] = {
-        ...newImages[index],
-        src: url
-      };
-      return newImages;
-    });
-  };
-
   // Handle aspect ratio change
   const handleAspectRatioChange = (index, aspectRatio) => {
     setImages(prevImages => {
@@ -164,33 +178,15 @@ export default function AddProjectForm({ onSuccess, editingProject = null }) {
       if (!newImages[index]) {
         newImages[index] = { src: '', color: '#000000', aspectRatio: 'landscape', width: 16, height: 9 };
       }
-      // Update width/height based on aspectRatio
       let width, height;
       switch (aspectRatio) {
-        case 'square':
-          width = 1;
-          height = 1;
-          break;
-        case 'portrait':
-          width = 3;
-          height = 4;
-          break;
-        case 'landscape-3-4':
-          width = 4;
-          height = 3;
-          break;
+        case 'square':   width = 1; height = 1; break;
+        case 'portrait': width = 3; height = 4; break;
+        case 'landscape-3-4': width = 4; height = 3; break;
         case 'landscape':
-        default:
-          width = 16;
-          height = 9;
-          break;
+        default:         width = 16; height = 9; break;
       }
-      newImages[index] = {
-        ...newImages[index],
-        aspectRatio: aspectRatio || 'landscape',
-        width: width,
-        height: height,
-      };
+      newImages[index] = { ...newImages[index], aspectRatio: aspectRatio || 'landscape', width, height };
       return newImages;
     });
   };
@@ -199,13 +195,8 @@ export default function AddProjectForm({ onSuccess, editingProject = null }) {
   const handleWidthChange = (index, width) => {
     setImages(prevImages => {
       const newImages = [...prevImages];
-      if (!newImages[index]) {
-        newImages[index] = { src: '', color: '#000000', aspectRatio: 'landscape', width: 16, height: 9 };
-      }
-      newImages[index] = {
-        ...newImages[index],
-        width: parseInt(width) || 16
-      };
+      if (!newImages[index]) newImages[index] = { src: '', color: '#000000', aspectRatio: 'landscape', width: 16, height: 9 };
+      newImages[index] = { ...newImages[index], width: parseInt(width) || 16 };
       return newImages;
     });
   };
@@ -214,25 +205,56 @@ export default function AddProjectForm({ onSuccess, editingProject = null }) {
   const handleHeightChange = (index, height) => {
     setImages(prevImages => {
       const newImages = [...prevImages];
-      if (!newImages[index]) {
-        newImages[index] = { src: '', color: '#000000', aspectRatio: 'landscape', width: 16, height: 9 };
-      }
-      newImages[index] = {
-        ...newImages[index],
-        height: parseInt(height) || 9
-      };
+      if (!newImages[index]) newImages[index] = { src: '', color: '#000000', aspectRatio: 'landscape', width: 16, height: 9 };
+      newImages[index] = { ...newImages[index], height: parseInt(height) || 9 };
       return newImages;
     });
-  };
-
-  // Add new image input
-  const handleAddImage = () => {
-    setImages([...images, { src: '', color: '#000000', aspectRatio: 'landscape', width: 16, height: 9 }]);
   };
 
   // Remove image
   const handleRemoveImage = (index) => {
     setImages(images.filter((_, i) => i !== index));
+  };
+
+  // Upload ảnh đại diện trực tiếp lên Cloudinary từ browser
+  const handleMainImageUpload = async (ev) => {
+    const files = ev.target?.files;
+    if (!files?.length) return;
+    setIsUploadingMain(true);
+    try {
+      const url = await uploadToCloudinary(files[0]);
+      setImages(prev => {
+        const newImages = [...prev];
+        newImages[0] = { ...newImages[0], src: url };
+        return newImages;
+      });
+      toast.success('Tải ảnh đại diện thành công!');
+    } catch (err) {
+      toast.error(err.message || 'Lỗi khi tải ảnh!');
+    } finally {
+      setIsUploadingMain(false);
+      if (mainImageInputRef.current) mainImageInputRef.current.value = '';
+    }
+  };
+
+  // Upload nhiều ảnh gallery trực tiếp lên Cloudinary từ browser
+  const handleGalleryUpload = async (ev) => {
+    const files = Array.from(ev.target?.files || []);
+    if (!files.length) return;
+    setIsUploadingGallery(true);
+    try {
+      const urls = await Promise.all(files.map(f => uploadToCloudinary(f)));
+      setImages(prev => [
+        ...prev,
+        ...urls.map(url => ({ src: url, color: '#000000', aspectRatio: 'square', width: 1, height: 1 }))
+      ]);
+      toast.success(`Tải ${urls.length} ảnh thành công!`);
+    } catch (err) {
+      toast.error(err.message || 'Lỗi khi tải ảnh!');
+    } finally {
+      setIsUploadingGallery(false);
+      if (galleryInputRef.current) galleryInputRef.current.value = '';
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -572,105 +594,171 @@ export default function AddProjectForm({ onSuccess, editingProject = null }) {
           </div>
         </div>
 
-        {/* Images Section - Giống them-san-pham-json */}
+        {/* Images Section */}
         <div className="space-y-6">
           <h3 className="text-lg font-semibold text-gray-800 border-b pb-2">Hình ảnh</h3>
           
-          {/* Main Image - First image */}
+          {/* Main Image Upload */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              Đường dẫn ảnh chính (Ảnh đại diện) <span className="text-red-500">*</span>
+              Ảnh đại diện <span className="text-red-500">*</span>
             </label>
-            <div className="flex gap-2">
-              <input
-                type="text"
-                value={images[0]?.src || ''}
-                onChange={(e) => handleImageUrlChange(0, e.target.value)}
-                className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                placeholder="/images/projects/project-1.jpg"
-                required
-              />
+            <div className="flex items-start gap-4">
+              {/* Upload button */}
+              <label
+                htmlFor="mainImageInput"
+                className={`flex flex-col items-center justify-center w-36 h-36 border-2 border-dashed rounded-xl cursor-pointer transition-colors ${
+                  isUploadingMain
+                    ? 'border-blue-300 bg-blue-50 cursor-not-allowed'
+                    : 'border-gray-300 bg-gray-50 hover:border-blue-400 hover:bg-blue-50'
+                }`}
+              >
+                {isUploadingMain ? (
+                  <>
+                    <Loader2 size={24} className="text-blue-500 animate-spin mb-1" />
+                    <span className="text-xs text-blue-500">Đang tải...</span>
+                  </>
+                ) : (
+                  <>
+                    <Upload size={24} className="text-gray-400 mb-1" />
+                    <span className="text-xs text-gray-500 text-center px-2">Tải ảnh đại diện</span>
+                    <span className="text-xs text-gray-400">Click để chọn</span>
+                  </>
+                )}
+                <input
+                  id="mainImageInput"
+                  ref={mainImageInputRef}
+                  type="file"
+                  accept="image/*"
+                  className="hidden"
+                  disabled={isUploadingMain}
+                  onChange={handleMainImageUpload}
+                />
+              </label>
+
+              {/* Preview */}
               {images[0]?.src && (
-                <div className="relative w-20 h-20 border border-gray-300 rounded-lg overflow-hidden">
+                <div className="relative group w-36 h-36 border border-gray-200 rounded-xl overflow-hidden shadow-sm">
                   <Image
                     src={images[0].src}
-                    alt="Preview"
+                    alt="Ảnh đại diện"
                     fill
                     className="object-cover"
                   />
+                  <button
+                    type="button"
+                    onClick={() => setImages(prev => { const n = [...prev]; n[0] = { ...n[0], src: '' }; return n; })}
+                    className="absolute top-1 right-1 p-1 bg-red-500 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+                  >
+                    <X size={12} />
+                  </button>
                 </div>
               )}
             </div>
-            <p className="mt-1 text-sm text-gray-500">
-              Dán đường link hình ảnh từ thư mục public. Ảnh này sẽ là ảnh đại diện của dự án.
-            </p>
+            <p className="mt-2 text-xs text-gray-400">Ảnh này sẽ là ảnh đại diện của dự án. Khuyến nghị: 16:9, tối thiểu 800x450px.</p>
           </div>
 
-          {/* Additional Images */}
+          {/* Gallery Images Upload */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              Đường dẫn ảnh bổ sung (tùy chọn)
+              Ảnh bổ sung (Gallery)
             </label>
             <p className="text-sm text-gray-500 mb-3">
-              Nhập tỷ lệ ảnh (width x height) để hiển thị đúng trong album. Ví dụ: 6x4, 4x6, 4x4, 16x9
+              Có thể chọn nhiều ảnh cùng lúc. Sau khi tải lên, bạn có thể chỉnh tỷ lệ từng ảnh.
             </p>
+
+            {/* Upload multiple button */}
+            <label
+              htmlFor="galleryInput"
+              className={`inline-flex items-center gap-2 px-4 py-2.5 border-2 border-dashed rounded-xl cursor-pointer transition-colors mb-4 ${
+                isUploadingGallery
+                  ? 'border-blue-300 bg-blue-50 text-blue-500 cursor-not-allowed'
+                  : 'border-gray-300 bg-gray-50 text-gray-600 hover:border-blue-400 hover:bg-blue-50 hover:text-blue-600'
+              }`}
+            >
+              {isUploadingGallery ? (
+                <><Loader2 size={18} className="animate-spin" /> Đang tải ảnh...</>
+              ) : (
+                <><ImageIcon size={18} /> Chọn ảnh gallery (nhiều ảnh)</>
+              )}
+              <input
+                id="galleryInput"
+                ref={galleryInputRef}
+                type="file"
+                accept="image/*"
+                multiple
+                className="hidden"
+                disabled={isUploadingGallery}
+                onChange={handleGalleryUpload}
+              />
+            </label>
+
+            {/* Gallery list */}
             {images.slice(1).map((img, index) => (
               <div key={index + 1} className="grid grid-cols-1 xl:grid-cols-12 gap-3 mb-4 p-4 bg-gray-50 rounded-xl border border-gray-100 items-center">
-                <div className="xl:col-span-5">
+                {/* Preview */}
+                <div className="xl:col-span-2 flex justify-center">
+                  {img.src ? (
+                    <div className={`relative border border-gray-300 rounded-lg overflow-hidden ${
+                      img.aspectRatio === 'square' ? 'w-16 h-16' :
+                      img.aspectRatio === 'portrait' ? 'w-12 h-16' :
+                      img.aspectRatio === 'landscape-3-4' ? 'w-16 h-12' :
+                      'w-24 h-14'
+                    }`}>
+                      <Image src={img.src} alt={`Gallery ${index + 2}`} fill className="object-cover" />
+                    </div>
+                  ) : (
+                    <div className="w-16 h-16 bg-gray-200 rounded-lg flex items-center justify-center">
+                      <ImageIcon size={20} className="text-gray-400" />
+                    </div>
+                  )}
+                </div>
+
+                {/* URL hiển thị (readonly) */}
+                <div className="xl:col-span-4">
                   <input
                     type="text"
                     value={img.src}
-                    onChange={(e) => handleImageUrlChange(index + 1, e.target.value)}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    placeholder={`/images/projects/gallery-${index + 1}.jpg`}
+                    readOnly
+                    className="w-full px-3 py-2 border border-gray-200 rounded-lg bg-gray-100 text-gray-500 text-sm truncate"
+                    placeholder="URL ảnh sau khi upload"
                   />
                 </div>
+
+                {/* Width x Height */}
                 <div className="xl:col-span-2 flex items-center gap-2">
                   <input
                     type="number"
                     value={img.width || 16}
                     onChange={(e) => handleWidthChange(index + 1, e.target.value)}
-                    className="w-full px-2 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+                    className="w-full px-2 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-sm"
                     min="1"
                   />
-                  <span className="text-gray-400">x</span>
+                  <span className="text-gray-400 text-sm">x</span>
                   <input
                     type="number"
                     value={img.height || 9}
                     onChange={(e) => handleHeightChange(index + 1, e.target.value)}
-                    className="w-full px-2 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+                    className="w-full px-2 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-sm"
                     min="1"
                   />
                 </div>
-                <div className="xl:col-span-2">
+
+                {/* Aspect ratio */}
+                <div className="xl:col-span-3">
                   <select
                     value={img.aspectRatio || 'landscape'}
                     onChange={(e) => handleAspectRatioChange(index + 1, e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-sm"
                   >
-                    <option value="landscape">Ảnh ngang (16:9)</option>
-                    <option value="landscape-3-4">Ảnh ngang (4:3)</option>
-                    <option value="square">Ảnh vuông (1:1)</option>
-                    <option value="portrait">Ảnh dọc (3:4)</option>
+                    <option value="landscape">Ngang (16:9)</option>
+                    <option value="landscape-3-4">Ngang (4:3)</option>
+                    <option value="square">Vuông (1:1)</option>
+                    <option value="portrait">Dọc (3:4)</option>
                   </select>
                 </div>
-                <div className="xl:col-span-2 flex justify-center">
-                  {img.src && (
-                    <div className={`relative border border-gray-300 rounded-lg overflow-hidden ${
-                      img.aspectRatio === 'square' ? 'w-16 h-16' : 
-                      img.aspectRatio === 'portrait' ? 'w-12 h-16' : 
-                      img.aspectRatio === 'landscape-3-4' ? 'w-16 h-12' :
-                      'w-24 h-14'
-                    }`}>
-                      <Image
-                        src={img.src}
-                        alt={`Preview ${index + 2}`}
-                        fill
-                        className="object-cover"
-                      />
-                    </div>
-                  )}
-                </div>
+
+                {/* Remove */}
                 <div className="xl:col-span-1 flex justify-end">
                   <button
                     type="button"
@@ -682,14 +770,6 @@ export default function AddProjectForm({ onSuccess, editingProject = null }) {
                 </div>
               </div>
             ))}
-            <button
-              type="button"
-              onClick={handleAddImage}
-              className="inline-flex items-center px-4 py-2 bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-100 transition-colors gap-2"
-            >
-              <Plus size={20} />
-              Thêm ảnh
-            </button>
           </div>
         </div>
 
