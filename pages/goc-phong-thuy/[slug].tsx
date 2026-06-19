@@ -3,7 +3,6 @@ import {
   InferGetServerSidePropsType,
   NextPage,
 } from "next";
-// @ts-expect-error type resolution issue with bundler mode
 import parse from "html-react-parser";
 import DefaultLayout from "../../components/layout/DefaultLayout";
 import db from "../../utils/db";

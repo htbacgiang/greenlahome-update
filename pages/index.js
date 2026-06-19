@@ -158,11 +158,6 @@ export default function Home({ posts, meta }) {
 
   return (
     <DefaultLayout>
-      {/* Tiêu đề chính không nên ẩn, nhưng nếu thiết kế không phù hợp, có thể tích hợp vào BannerTTG */}
-      <h1 className="sr-only">
-        GreenLa Home - Thiết Kế & Thi Công Nội Thất Chung Cư, Nhà Phố Chuyên Nghiệp
-      </h1>
-
       <BannerTTG onConsultClick={toggleForm} /> {/* Thêm nút tư vấn vào Banner */}
       <ServicesSection />
       <ProjectsPage showHero={false} />

@@ -14,7 +14,17 @@ import "../styles/editor.css";
 import "../styles/q8design.css";
 import Head from "next/head";
 
-let persistor = persistStore(store);
+const persistor = typeof window !== "undefined" ? persistStore(store) : null;
+
+function ReduxPersistGate({ children }) {
+  if (!persistor) return children;
+
+  return (
+    <PersistGate loading={children} persistor={persistor}>
+      {children}
+    </PersistGate>
+  );
+}
 
 const rajdhani = Rajdhani({
   subsets: ["latin"],
@@ -55,7 +65,7 @@ function MyApp({ Component, pageProps: { session, meta, ...pageProps } }) {
       )}
       <SessionProvider session={session}>
         <Provider store={store}>
-          <PersistGate loading={null} persistor={persistor}>
+          <ReduxPersistGate>
             <div className={rajdhani.variable}>
               <Toaster />
               <ToastContainer
@@ -73,7 +83,7 @@ function MyApp({ Component, pageProps: { session, meta, ...pageProps } }) {
               />
               <Component {...pageProps} />
             </div>
-          </PersistGate>
+          </ReduxPersistGate>
         </Provider>
       </SessionProvider>
     </>

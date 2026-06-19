@@ -3,7 +3,7 @@ import Image from "next/image";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 import ContactForm from "../header/ContactForm";
 
-export default function Banner() {
+export default function Banner({ onConsultClick }) {
   // State to track the current slide
   const [currentSlide, setCurrentSlide] = useState(0);
   // State to control form visibility
@@ -18,9 +18,9 @@ export default function Banner() {
     {
       image: "/images/banner4.webp",
       smallHeading: "GREENLAHOME",
-      heading: "Thiết kế hiện đại, tối ưu không gian sống",
+      heading: "Thiết Kế & Thi Công Nội Thất Chung Cư, Nhà Phố",
       description:
-        "Chúng tôi cung cấp giải pháp thiết kế và thi công nội thất chuyên nghiệp, tối ưu không gian sống cho mọi gia đình.",
+        "GreenLa Home chuyên thiết kế và thi công nội thất chung cư, nhà phố, biệt thự với giải pháp hiện đại, tối ưu không gian sống và chi phí.",
     },
     {
       image: "/images/banner5.webp",
@@ -71,6 +71,15 @@ export default function Banner() {
   const toggleForm = useCallback(() => {
     setIsFormOpen((prev) => !prev);
   }, []);
+
+  const handleConsultClick = useCallback(() => {
+    if (onConsultClick) {
+      onConsultClick();
+      return;
+    }
+
+    toggleForm();
+  }, [onConsultClick, toggleForm]);
 
   // Keyboard navigation for slides
   useEffect(() => {
@@ -147,15 +156,15 @@ export default function Banner() {
         <p className="text-green-500 text-3xl font-bold uppercase tracking-widest mb-2">
           {slides[currentSlide].smallHeading}
         </p>
-        <h2 className="text-2xl md:text-4xl font-bold mb-4">
+        <h1 className="text-2xl md:text-4xl font-bold mb-4">
           {slides[currentSlide].heading}
-        </h2>
+        </h1>
         <p className="text-gray-300 text-sm md:text-lg max-w-5xl mx-auto mb-6">
           {slides[currentSlide].description}
         </p>
         <button
           className="flex items-center bg-green-600 text-white px-6 py-3 rounded-full hover:bg-orange-600 transition-colors focus:outline-none focus:ring-2 focus:ring-orange-400"
-          onClick={toggleForm}
+          onClick={handleConsultClick}
           aria-label="Open registration form"
         >
           Tìm hiểu ngay
@@ -198,7 +207,7 @@ export default function Banner() {
       </div>
 
       {/* Registration Form Modal */}
-      {isFormOpen && (
+      {!onConsultClick && isFormOpen && (
         <div
           className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50"
           onClick={(e) => {
