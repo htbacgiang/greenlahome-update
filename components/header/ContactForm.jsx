@@ -93,7 +93,7 @@ export default function ContactForm() {
         <div className="bg-gray-50 border border-black rounded-2xl p-8 md:p-12">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
             <div ref={leftSectionRef} className="opacity-0 md:block hidden">
-              <h2 className="text-xl font-semibold text-green-500 uppercase tracking-wide mb-2">
+              <h2 className="text-xl font-semibold text-[#EAD5B0] uppercase tracking-wide mb-2">
                 Đăng ký tư vấn
               </h2>
               <h3 className="text-xl font-bold text-gray-900 mb-4">
@@ -121,11 +121,11 @@ export default function ContactForm() {
                       onChange={handleChange}
                       placeholder="Họ và tên"
                       className={`w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 ${
-                        errors.name ? "border-green-500" : "border-gray-300"
+                        errors.name ? "border-[#F9F3E8]0" : "border-gray-300"
                       }`}
                     />
                     {errors.name && (
-                      <p className="text-green-500 text-sm mt-1">{errors.name}</p>
+                      <p className="text-[#EAD5B0] text-sm mt-1">{errors.name}</p>
                     )}
                   </div>
                   <div>
@@ -136,11 +136,11 @@ export default function ContactForm() {
                       onChange={handleChange}
                       placeholder="Số điện thoại"
                       className={`w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 ${
-                        errors.phone ? "border-green-500" : "border-gray-300"
+                        errors.phone ? "border-[#F9F3E8]0" : "border-gray-300"
                       }`}
                     />
                     {errors.phone && (
-                      <p className="text-green-500 text-sm mt-1">{errors.phone}</p>
+                      <p className="text-[#EAD5B0] text-sm mt-1">{errors.phone}</p>
                     )}
                   </div>
                 </div>
@@ -152,11 +152,11 @@ export default function ContactForm() {
                     onChange={handleChange}
                     placeholder="Email của bạn "
                     className={`w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 ${
-                      errors.email ? "border-green-500" : "border-gray-300"
+                      errors.email ? "border-[#F9F3E8]0" : "border-gray-300"
                     }`}
                   />
                   {errors.email && (
-                    <p className="text-green-500 text-sm mt-1">{errors.email}</p>
+                    <p className="text-[#EAD5B0] text-sm mt-1">{errors.email}</p>
                   )}
                 </div>
                 <div>
@@ -166,11 +166,11 @@ export default function ContactForm() {
                     onChange={handleChange}
                     placeholder="Yêu cầu tư vấn của bạn (ví dụ: thiết MOQ: thiết kế nội thất phòng khách, tủ bếp hiện đại...)"
                     className={`w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 h-32 resize-none ${
-                      errors.message ? "border-green-500" : "border-gray-300"
+                      errors.message ? "border-[#F9F3E8]0" : "border-gray-300"
                     }`}
                   />
                   {errors.message && (
-                    <p className="text-green-500 text-sm mt-1">
+                    <p className="text-[#EAD5B0] text-sm mt-1">
                       {errors.message}
                     </p>
                   )}
@@ -178,7 +178,7 @@ export default function ContactForm() {
                 <button
                   type="submit"
                   disabled={status === "Đang gửi..."}
-                  className="w-full bg-green-500 text-white font-semibold py-3 rounded-full hover:bg-orange-600 transition-colors disabled:bg-orange-300 flex items-center justify-center gap-2"
+                  className="w-full bg-[#EAD5B0] text-white font-semibold py-3 rounded-full hover:bg-orange-600 transition-colors disabled:bg-orange-300 flex items-center justify-center gap-2"
                 >
                   Gửi yêu cầu tư vấn <span>→</span>
                 </button>
@@ -187,7 +187,7 @@ export default function ContactForm() {
                 <p
                   className={`mt-2 text-center ${
                     status.includes("thành công")
-                      ? "text-green-600"
+                      ? "text-[#C4A882]"
                       : "text-orange-600"
                   }`}
                 >

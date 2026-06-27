@@ -513,7 +513,7 @@ export default function ProjectDetailPage({ project }) {
 
               <div className="flex items-center gap-3 text-white/80 justify-center">
                 <span className="text-sm md:text-base font-medium">Design by</span>
-                <span className="text-xl md:text-2xl font-bold text-white">Greenla Home Team</span>
+                <span className="text-xl md:text-2xl font-bold text-white">Greenlahome Team</span>
               </div>
             </div>
           </div>
@@ -715,7 +715,7 @@ export default function ProjectDetailPage({ project }) {
                 Dự án liên quan
               </p>
               <p className="text-lg text-green-600">
-                Khám phá thêm các dự án tương tự khác của Greenla Home
+                Khám phá thêm các dự án tương tự khác của Greenlahome
               </p>
             </div>
 

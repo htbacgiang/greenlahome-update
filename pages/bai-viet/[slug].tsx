@@ -3,13 +3,27 @@ import {
   NextPage,
 } from "next";
 import parse from "html-react-parser";
-import DefaultLayout from "../../components/layout/DefaultLayout";
+import DefaultLayout2 from "../../components/layout/DefaultLayout2";
 import db from "../../utils/db";
 import Post from "../../models/Post";
+import Author from "../../models/Author";
 import Share from "../../components/common/Share";
+import TableOfContents from "../../components/common/TableOfContents";
 import Link from "next/link";
 import Image from "next/image";
+import slugify from "slugify";
 import { trimText } from "../../utils/helper";
+import {
+  normalizeSiteImageUrl,
+  rewriteCloudinaryImageUrls,
+} from "../../utils/imageUrls";
+
+type AuthorData = {
+  name: string;
+  role?: string;
+  biography?: string;
+  avatarUrl?: string;
+};
 
 type PostData = {
   id: string;
@@ -21,6 +35,8 @@ type PostData = {
   thumbnail: string;
   createdAt: string;
   category: string;
+  authorData?: AuthorData;
+  headings: { id: string; text: string; level: number }[];
   recentPosts: {
     id: string;
     title: string;
@@ -64,7 +80,6 @@ type Props = {
 };
 
 const host = process.env.NEXT_PUBLIC_HOST || "https://greenlahome.vn";
-const defaultImage = `${host}/images/noi-that-1.jpg`;
 
 const getPostHref = (post: { slug: string; isDirectPost?: boolean }) =>
   post.isDirectPost ? `/${post.slug}` : `/bai-viet/${post.slug}`;
@@ -73,7 +88,7 @@ const SinglePost: NextPage<Props> = ({ post, meta }) => {
   // Add null/undefined checks to prevent errors
   if (!post) {
     return (
-      <DefaultLayout>
+      <DefaultLayout2>
         <div className="max-w-7xl mx-auto px-4 py-8">
           <div className="text-center mt-[100px]">
             <h1 className="text-2xl font-bold text-gray-800">Bài viết không tồn tại</h1>
@@ -83,7 +98,7 @@ const SinglePost: NextPage<Props> = ({ post, meta }) => {
             </Link>
           </div>
         </div>
-      </DefaultLayout>
+      </DefaultLayout2>
     );
   }
 
@@ -93,7 +108,7 @@ const SinglePost: NextPage<Props> = ({ post, meta }) => {
   const processedContent = (() => {
     if (!content) return content;
 
-    let processed = content;
+    let processed = rewriteCloudinaryImageUrls(content);
 
     // Tìm tất cả các thẻ img (không nằm trong figure)
     // Regex này sẽ match img không nằm trong figure tag
@@ -131,7 +146,7 @@ const SinglePost: NextPage<Props> = ({ post, meta }) => {
   })();
 
   return (
-    <DefaultLayout>
+    <DefaultLayout2>
       <div className="container mx-auto px-4 py-8">
         <div className="flex flex-col md:flex-row">
           {/* Main Content - 75% width on md and up */}
@@ -155,6 +170,10 @@ const SinglePost: NextPage<Props> = ({ post, meta }) => {
               <div className="mt-2 mb-2">
                 <Share url={`${host}/bai-viet/${slug}`} />
               </div>
+
+              {/* Table of Contents */}
+              <TableOfContents headings={post.headings} />
+
               <div className="blog prose prose-lg dark:prose-invert [&_img]:mx-auto overflow-visible">
                 <style jsx>{`
                   .blog {
@@ -191,6 +210,37 @@ const SinglePost: NextPage<Props> = ({ post, meta }) => {
                 `}</style>
                 {parse(processedContent || content)}
               </div>
+
+              {/* Author Bio Card */}
+              {post.authorData && (
+                <div className="mt-12 p-6 rounded-xl border border-gray-200/80 bg-white dark:bg-gray-800 dark:border-gray-700 flex flex-col sm:flex-row items-center sm:items-start gap-5 transition-shadow hover:shadow-sm">
+                  <div className="relative w-20 h-20 rounded-full overflow-hidden border border-green-100 dark:border-green-900 bg-slate-50 shrink-0">
+                    {post.authorData.avatarUrl ? (
+                      <Image
+                        src={post.authorData.avatarUrl}
+                        alt={post.authorData.name}
+                        fill
+                        className="object-cover"
+                      />
+                    ) : (
+                      <div className="w-full h-full bg-green-600 flex items-center justify-center text-white text-2xl font-bold">
+                        {post.authorData.name.charAt(0).toUpperCase()}
+                      </div>
+                    )}
+                  </div>
+                  <div className="text-center sm:text-left flex-1 min-w-0">
+                    <span className="text-[10px] font-bold text-green-700 dark:text-green-400 uppercase tracking-widest block mb-1">
+                      {post.authorData.role || "Tác giả bài viết"}
+                    </span>
+                    <h4 className="text-lg font-bold text-gray-900 dark:text-white mb-2">
+                      {post.authorData.name}
+                    </h4>
+                    <p className="text-sm text-gray-600 dark:text-gray-300 leading-relaxed italic">
+                      {post.authorData.biography}
+                    </p>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
 
@@ -253,24 +303,11 @@ const SinglePost: NextPage<Props> = ({ post, meta }) => {
           </div>
         </div>
       </div>
-    </DefaultLayout>
+    </DefaultLayout2>
   );
 };
 
 export default SinglePost;
-
-// Helper function to normalize image URL
-const normalizeImageUrl = (imageUrl: string | undefined, baseUrl: string): string => {
-  if (!imageUrl) return `${baseUrl}/images/noi-that-1.jpg`;
-
-  // Check if URL is already absolute (starts with http:// or https://)
-  if (imageUrl.startsWith('http://') || imageUrl.startsWith('https://')) {
-    return imageUrl;
-  }
-
-  // If relative path, prepend baseUrl
-  return `${baseUrl}${imageUrl.startsWith('/') ? imageUrl : `/${imageUrl}`}`;
-};
 
 export const getServerSideProps: GetServerSideProps<
   { post?: PostData; meta?: MetaData },
@@ -285,30 +322,30 @@ export const getServerSideProps: GetServerSideProps<
       slug: params?.slug,
       isDraft: { $ne: true },
       $or: [{ deletedAt: null }, { deletedAt: { $exists: false } }]
-    });
+    }).populate("author");
 
     if (!post) {
       console.log(`Post not found for slug: ${params?.slug}`);
       const errorMeta: MetaData = {
-        title: `Bài viết không tồn tại (${params?.slug}) | Greenla Home`,
+        title: `Bài viết không tồn tại (${params?.slug}) | Greenlahome`,
         description: `Chúng tôi không tìm thấy bài viết với slug: ${params?.slug}. Hãy kiểm tra lại đường dẫn.`,
-        keywords: "bài viết không tồn tại, thiết kế nội thất, Greenla Home",
+        keywords: "bài viết không tồn tại, thiết kế nội thất, Greenlahome",
         robots: "noindex, follow",
-        author: "Greenla Home",
+        author: "Greenlahome",
         canonical: `${baseUrl}/bai-viet`,
         og: {
-          title: "Bài viết không tồn tại | Greenla Home",
+          title: "Bài viết không tồn tại | Greenlahome",
           description: `Không tìm thấy slug: ${params?.slug}`,
           type: "website",
           image: `${baseUrl}/images/noi-that-1.jpg`,
           imageWidth: "1200",
           imageHeight: "630",
           url: `${baseUrl}/bai-viet`,
-          siteName: "Greenla Home",
+          siteName: "Greenlahome",
         },
         twitter: {
           card: "summary_large_image",
-          title: "Bài viết không tồn tại | Greenla Home",
+          title: "Bài viết không tồn tại | Greenlahome",
           description: `Không tìm thấy slug: ${params?.slug}`,
           image: `${baseUrl}/images/noi-that-1.jpg`,
         },
@@ -332,46 +369,67 @@ export const getServerSideProps: GetServerSideProps<
       .select("slug title thumbnail category createdAt isDirectPost");
 
     const recentPosts = posts.map((p) => {
-      // Normalize thumbnail URL giống như bài viết chính
+      // Giữ nguyên URL Cloudinary, chỉ fallback khi không có thumbnail
       const thumbUrl = p.thumbnail?.url;
-      const normalizedThumbnail = normalizeImageUrl(thumbUrl, baseUrl);
+      const thumbnail = thumbUrl
+        ? (thumbUrl.startsWith("http://") || thumbUrl.startsWith("https://")
+            ? thumbUrl
+            : `${baseUrl}/${thumbUrl.replace(/^\/+/, "")}`)
+        : undefined;
 
       return {
         id: p._id.toString(),
         title: p.title,
         slug: p.slug,
         category: p.category || "Uncategorized",
-        thumbnail: normalizedThumbnail,
+        thumbnail,
         createdAt: p.createdAt.toString(),
         isDirectPost: p.isDirectPost || false,
       };
     });
 
-    const { _id, title, content, meta, slug, tags, thumbnail, category, createdAt } = post;
-    const thumbnailUrl = normalizeImageUrl(thumbnail?.url, baseUrl);
+    const { _id, title, content, meta, slug, tags, thumbnail, category, createdAt, author } = post;
+    const thumbnailUrl = normalizeSiteImageUrl(thumbnail?.url, baseUrl);
 
-    const truncatedDescription = trimText(meta, 160) || `Đọc bài viết "${title}" về thiết kế nội thất từ chuyên gia Greenla Home. Kiến thức chuyên môn, xu hướng thiết kế mới nhất, giúp bạn tạo không gian sống hoàn hảo.`;
+    const truncatedDescription = trimText(meta, 160) || `Đọc bài viết "${title}" về thiết kế nội thất từ chuyên gia Greenlahome. Kiến thức chuyên môn, xu hướng thiết kế mới nhất, giúp bạn tạo không gian sống hoàn hảo.`;
+
+    // Extract populated author info
+    const authorObj = author as any;
+    const authorData: AuthorData = authorObj && authorObj.name ? {
+      name: authorObj.name,
+      role: authorObj.role || "Tác giả",
+      biography: authorObj.biography || "Chuyên gia tư vấn thiết kế tại GreenlaHome.",
+      avatarUrl: authorObj.avatar?.url || "/logo-greenlahome.png",
+    } : {
+      name: "Ban Biên Tập GreenlaHome",
+      role: "Ban Biên Tập",
+      biography: "Đội ngũ biên tập nội dung, chuyên viên tư vấn thiết kế và kiến trúc tại GreenlaHome.",
+      avatarUrl: "/logo-greenlahome.png",
+    };
+
+    // Extract headings and add unique IDs to tags
+    const { processedHtml, headings } = parseHeadingsAndAddIds(content || "");
 
     const metaData: MetaData = {
-      title: `${title} | Greenla Home`,
+      title: `${title} | Greenlahome`,
       description: truncatedDescription,
-      keywords: `${title}, thiết kế nội thất, Greenla Home, kiến trúc, trang trí nhà, xu hướng thiết kế, ${category}`,
+      keywords: `${title}, thiết kế nội thất, Greenlahome, kiến trúc, trang trí nhà, xu hướng thiết kế, ${category}`,
       robots: "index, follow",
-      author: "Greenla Home",
+      author: authorData.name,
       canonical: `${baseUrl}/bai-viet/${slug}`,
       og: {
-        title: `${title} | Greenla Home`,
+        title: `${title} | Greenlahome`,
         description: truncatedDescription,
         type: "article",
         image: thumbnailUrl,
         imageWidth: "1200",
         imageHeight: "630",
         url: `${baseUrl}/bai-viet/${slug}`,
-        siteName: "Greenla Home",
+        siteName: "Greenlahome",
       },
       twitter: {
         card: "summary_large_image",
-        title: `${title} | Greenla Home`,
+        title: `${title} | Greenlahome`,
         description: truncatedDescription,
         image: thumbnailUrl,
       },
@@ -380,13 +438,15 @@ export const getServerSideProps: GetServerSideProps<
     const postData: PostData = {
       id: _id.toString(),
       title,
-      content,
+      content: processedHtml,
       meta,
       slug,
       tags,
       category: category || "Uncategorized",
-      thumbnail: thumbnail?.url || "",
+      thumbnail: thumbnailUrl,
       createdAt: createdAt.toString(),
+      authorData,
+      headings,
       recentPosts,
     };
 
@@ -400,4 +460,44 @@ export const getServerSideProps: GetServerSideProps<
     console.error("Error in getServerSideProps:", error);
     return { notFound: true };
   }
+};
+
+// Helper function to generate clean headings and IDs
+const parseHeadingsAndAddIds = (html: string) => {
+  const headings: { id: string; text: string; level: number }[] = [];
+  let index = 1;
+
+  const processedHtml = html.replace(
+    /<(h2|h3)([^>]*)>([\s\S]*?)<\/\1>/gi,
+    (match, tag, attrs, textContent) => {
+      // Remove any tags inside the heading text
+      const cleanText = textContent.replace(/<[^>]+>/g, "").trim();
+      if (!cleanText) return match;
+
+      const slugified = slugify(cleanText.toLowerCase(), {
+        replacement: "-",
+        remove: /[*+~.()'"!:@]/g,
+        lower: true,
+        strict: true,
+        locale: "vi",
+      }) || `heading-${index}`;
+      
+      const id = `${slugified}-${index++}`;
+
+      headings.push({
+        id,
+        text: cleanText,
+        level: tag.toLowerCase() === "h2" ? 2 : 3,
+      });
+
+      // Check if id attribute already exists
+      if (/id=/i.test(attrs)) {
+        return `<${tag}${attrs.replace(/id=["'][^"']*["']/i, `id="${id}"`)}>${textContent}</${tag}>`;
+      } else {
+        return `<${tag} id="${id}"${attrs}>${textContent}</${tag}>`;
+      }
+    }
+  );
+
+  return { processedHtml, headings };
 };

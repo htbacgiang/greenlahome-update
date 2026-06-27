@@ -108,7 +108,7 @@ const PropertyDetail = ({ project }) => {
   return (
     <>
       <Head>
-        <title>{project.title} | Nội thất GreenLa Home</title>
+        <title>{project.title} | Nội thất Greenlahome</title>
         <meta
           name="description"
           content={`Khám phá dự án ${project.title} tại ${project.location} – thi công nội thất cao cấp cho ${project.customer}.`}
@@ -275,7 +275,7 @@ const PropertyDetail = ({ project }) => {
             <div className="md:w-1/4 md:ml-6 mt-6 md:mt-0">
               {/* Featured Projects */}
               <div className="mt-6">
-                <h2 className="text-xl font-bold text-green-500 uppercase">Dự án tiêu biểu</h2>
+                <h2 className="text-xl font-bold text-[#EAD5B0] uppercase">Dự án tiêu biểu</h2>
                 <div className="mt-4 space-y-4">
                   {featuredProjects.length > 0 ? (
                     featuredProjects.map((featuredProject) => (
@@ -373,7 +373,7 @@ const PropertyDetail = ({ project }) => {
                 {status && (
                   <p
                     className={`mt-2 text-center ${
-                      status.includes("thành công") ? "text-green-600" : "text-red-600"
+                      status.includes("thành công") ? "text-[#C4A882]" : "text-red-600"
                     }`}
                     role="alert"
                   >

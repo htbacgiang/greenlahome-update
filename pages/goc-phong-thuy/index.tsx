@@ -130,7 +130,7 @@ const Blogs: NextPage<Props> = ({ posts, meta }) => {
             </nav>
             {/* Page Title */}
             <h1 className="text-3xl md:text-4xl font-bold text-white mt-2">
-              Góc Phong Thủy - GreenLa Home
+              Góc Phong Thủy - Greenlahome
             </h1>
             {/* Short Description */}
             <p className="text-lg md:text-xl text-white mt-2">

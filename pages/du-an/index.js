@@ -8,8 +8,8 @@ export default function DuAn({ meta }) {
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "CollectionPage",
-    "name": "Dự án Greenla Home - Portfolio thiết kế kiến trúc và nội thất",
-    "description": "Khám phá bộ sưu tập hơn 500 dự án thiết kế kiến trúc và nội thất đẳng cấp của Greenla Home. Từ biệt thự hiện đại, căn hộ cao cấp đến văn phòng sang trọng - mỗi dự án đều mang dấu ấn độc đáo.",
+    "name": "Dự án Greenlahome - Portfolio thiết kế kiến trúc và nội thất",
+    "description": "Khám phá bộ sưu tập hơn 500 dự án thiết kế kiến trúc và nội thất đẳng cấp của Greenlahome. Từ biệt thự hiện đại, căn hộ cao cấp đến văn phòng sang trọng - mỗi dự án đều mang dấu ấn độc đáo.",
     "url": "https://greenlahome.vn/du-an",
     "image": "https://greenlahome.vn/images/q8-design-projects.jpg",
     "breadcrumb": {
@@ -31,8 +31,8 @@ export default function DuAn({ meta }) {
     },
     "mainEntity": {
       "@type": "ItemList",
-      "name": "Danh sách dự án Greenla Home",
-      "description": "Bộ sưu tập các dự án thiết kế và thi công của Greenla Home",
+      "name": "Danh sách dự án Greenlahome",
+      "description": "Bộ sưu tập các dự án thiết kế và thi công của Greenlahome",
       "numberOfItems": "500+",
       "itemListElement": [
         {
@@ -43,7 +43,7 @@ export default function DuAn({ meta }) {
           "image": "https://greenlahome.vn/images/projects/biet-thu-thao-dien.jpg",
           "creator": {
             "@type": "Organization",
-            "name": "Greenla Home"
+            "name": "Greenlahome"
           },
           "dateCreated": "2023",
           "genre": "Architectural Design"
@@ -56,7 +56,7 @@ export default function DuAn({ meta }) {
           "image": "https://greenlahome.vn/images/og-image.jpg",
           "creator": {
             "@type": "Organization",
-            "name": "Greenla Home"
+            "name": "Greenlahome"
           },
           "dateCreated": "2023",
           "genre": "Interior Design"
@@ -69,7 +69,7 @@ export default function DuAn({ meta }) {
           "image": "https://greenlahome.vn/images/og-image.jpg",
           "creator": {
             "@type": "Organization",
-            "name": "Greenla Home"
+            "name": "Greenlahome"
           },
           "dateCreated": "2023",
           "genre": "Commercial Design"
@@ -78,7 +78,7 @@ export default function DuAn({ meta }) {
     },
     "publisher": {
       "@type": "Organization",
-      "name": "Greenla Home",
+      "name": "Greenlahome",
       "url": "https://greenlahome.vn",
       "logo": {
         "@type": "ImageObject",
@@ -93,11 +93,11 @@ export default function DuAn({ meta }) {
       "name": "Thiết kế kiến trúc và nội thất",
       "description": "Dịch vụ thiết kế kiến trúc, nội thất, thi công trọn gói và cải tạo không gian"
     },
-    "keywords": "dự án Greenla Home, thiết kế biệt thự, thiết kế căn hộ, thiết kế văn phòng, portfolio Q8, dự án kiến trúc, dự án nội thất, nhà đẹp, thiết kế hiện đại",
+    "keywords": "dự án Greenlahome, thiết kế biệt thự, thiết kế căn hộ, thiết kế văn phòng, portfolio Q8, dự án kiến trúc, dự án nội thất, nhà đẹp, thiết kế hiện đại",
     "inLanguage": "vi-VN",
     "isPartOf": {
       "@type": "WebSite",
-      "name": "Greenla Home",
+      "name": "Greenlahome",
       "url": "https://greenlahome.vn"
     }
   };
@@ -118,7 +118,7 @@ export default function DuAn({ meta }) {
       </Head>
 
       <h1 className="visually-hidden">
-        Dự án thiết kế kiến trúc và nội thất Greenla Home
+        Dự án thiết kế kiến trúc và nội thất Greenlahome
       </h1>
       <ProjectsPage />
     </DefaultLayout>
@@ -128,18 +128,18 @@ export default function DuAn({ meta }) {
 export async function getServerSideProps() {
   // Projects are now fetched client-side via API
   const meta = {
-    title: "Dự án Greenla Home - Bộ sưu tập thiết kế kiến trúc và nội thất đẳng cấp",
+    title: "Dự án Greenlahome - Bộ sưu tập thiết kế kiến trúc và nội thất đẳng cấp",
     description:
-      "Khám phá bộ sưu tập hơn 500 dự án thiết kế kiến trúc và nội thất đẳng cấp của Greenla Home. Từ biệt thự hiện đại, căn hộ cao cấp đến văn phòng sang trọng - mỗi dự án đều mang dấu ấn độc đáo.",
+      "Khám phá bộ sưu tập hơn 500 dự án thiết kế kiến trúc và nội thất đẳng cấp của Greenlahome. Từ biệt thự hiện đại, căn hộ cao cấp đến văn phòng sang trọng - mỗi dự án đều mang dấu ấn độc đáo.",
     keywords:
-      "dự án Greenla Home, thiết kế biệt thự, thiết kế căn hộ, thiết kế văn phòng, portfolio Q8, dự án kiến trúc, dự án nội thất, nhà đẹp, thiết kế hiện đại",
+      "dự án Greenlahome, thiết kế biệt thự, thiết kế căn hộ, thiết kế văn phòng, portfolio Q8, dự án kiến trúc, dự án nội thất, nhà đẹp, thiết kế hiện đại",
     robots: "index, follow",
-    author: "Greenla Home",
+    author: "Greenlahome",
     canonical: "https://greenlahome.vn/du-an",
     og: {
-      title: "Dự án Greenla Home - Bộ sưu tập thiết kế kiến trúc và nội thất đẳng cấp",
+      title: "Dự án Greenlahome - Bộ sưu tập thiết kế kiến trúc và nội thất đẳng cấp",
       description:
-        "Khám phá bộ sưu tập hơn 500 dự án thiết kế kiến trúc và nội thất đẳng cấp của Greenla Home. Từ biệt thự hiện đại, căn hộ cao cấp đến văn phòng sang trọng - mỗi dự án đều mang dấu ấn độc đáo.",
+        "Khám phá bộ sưu tập hơn 500 dự án thiết kế kiến trúc và nội thất đẳng cấp của Greenlahome. Từ biệt thự hiện đại, căn hộ cao cấp đến văn phòng sang trọng - mỗi dự án đều mang dấu ấn độc đáo.",
       type: "website",
       image: "https://greenlahome.vn/images/og-image.jpg",
       imageWidth: "1200",
@@ -148,9 +148,9 @@ export async function getServerSideProps() {
     },
     twitter: {
       card: "summary_large_image",
-      title: "Dự án Greenla Home - Bộ sưu tập thiết kế kiến trúc và nội thất đẳng cấp",
+      title: "Dự án Greenlahome - Bộ sưu tập thiết kế kiến trúc và nội thất đẳng cấp",
       description:
-        "Khám phá bộ sưu tập hơn 500 dự án thiết kế kiến trúc và nội thất đẳng cấp của Greenla Home. Từ biệt thự hiện đại, căn hộ cao cấp đến văn phòng sang trọng - mỗi dự án đều mang dấu ấn độc đáo.",
+        "Khám phá bộ sưu tập hơn 500 dự án thiết kế kiến trúc và nội thất đẳng cấp của Greenlahome. Từ biệt thự hiện đại, căn hộ cao cấp đến văn phòng sang trọng - mỗi dự án đều mang dấu ấn độc đáo.",
       image: "https://greenlahome.vn/images/og-image.jpg",
     },
   };

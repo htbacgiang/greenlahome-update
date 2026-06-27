@@ -42,7 +42,7 @@ export default function StrengthsSection() {
   const xTransform = useTransform(scrollYProgress, [0, 1], [100, -100]);
 
   return (
-    <section ref={containerRef} className="relative py-5 md:py-10 bg-q8-primary-50 overflow-hidden">
+    <section ref={containerRef} className="relative py-5 md:py-10 overflow-hidden">
       {/* Background Decor Text */}
       <div className="absolute top-[40%] left-[5%] w-full h-full pointer-events-none opacity-[0.03] select-none overflow-hidden">
         <h2 className="text-[10vw] font-black text-gray-900 leading-none whitespace-nowrap">
@@ -69,21 +69,15 @@ export default function StrengthsSection() {
         {/* Header Section */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-end mb-5 md:mb-20">
           <div>
-            <div className="inline-block px-4 py-1.5 bg-green-50 border border-green-100 rounded-full mb-6">
-              <span className="text-xs font-bold text-green-600 uppercase tracking-widest">
+            <div className="inline-block px-4 py-1.5 bg-[#F9F3E8] border border-[#F3E8D0] rounded-full mb-6">
+              <span className="text-xs font-bold text-[#C4A882] uppercase tracking-widest">
                 Quy trình làm việc
               </span>
             </div>
-            <h2 className="text-2xl md:text-5xl font-bold text-gray-900 leading-[1.1] tracking-tight">
-              Kiến Tạo <span className="text-green-600">Kiến Trúc</span> <br />
-              & Không Gian Sống <span className="text-gray-400">Hoàn Mỹ.</span>
+            <h2 className="text-2xl md:text-3xl font-bold text-gray-900 leading-[1.1] tracking-tight">
+              Kiến Tạo <span className="text-[#C4A882]">Kiến Trúc & Không Gian Sống</span>
+              <span className="text-gray-400"> Hoàn Mỹ.</span>
             </h2>
-          </div>
-          <div className="lg:text-right hidden md:block">
-            <p className="text-gray-500 text-lg md:text-xl leading-relaxed max-w-3xl lg:ml-auto">
-              Quy trình của chúng tôi luôn thích ứng, tinh chỉnh và phát triển theo tầm nhìn của bạn.
-              Giống như những người nghệ sĩ trước một khung tranh trống, chúng tôi biến đổi các căn phòng thành những tác phẩm nghệ thuật sống động.
-            </p>
           </div>
         </div>
 
@@ -108,7 +102,7 @@ export default function StrengthsSection() {
                   className="object-cover transition-transform duration-700 group-hover:scale-110"
                 />
                 {/* Number Overlay */}
-                <div className="absolute bottom-4 left-4 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-bold text-green-600 shadow-sm">
+                <div className="absolute bottom-4 left-4 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-bold text-[#C4A882] shadow-sm">
                   BƯỚC {step.id}
                 </div>
               </div>
@@ -116,12 +110,12 @@ export default function StrengthsSection() {
               {/* Content */}
               <div className="p-8 relative">
                 {/* Giant BG Number */}
-                <span className="absolute bottom-4 right-4 text-7xl font-black text-gray-100 group-hover:text-green-50 transition-colors duration-500 pointer-events-none">
+                <span className="absolute bottom-4 right-4 text-7xl font-black text-gray-100 group-hover:text-[#F9F3E8] transition-colors duration-500 pointer-events-none">
                   {step.id}
                 </span>
 
-                <h3 className="text-xl font-bold text-gray-900 mb-2 group-hover:text-green-600 transition-colors duration-300">
-                  <span className="text-green-600 mr-1">{step.id}.</span> {step.title}
+                <h3 className="text-xl font-bold text-gray-900 mb-2 group-hover:text-[#C4A882] transition-colors duration-300">
+                  <span className="text-[#C4A882] mr-1">{step.id}.</span> {step.title}
                 </h3>
                 <p className="text-gray-500 text-sm leading-relaxed relative z-10">
                   {step.description}

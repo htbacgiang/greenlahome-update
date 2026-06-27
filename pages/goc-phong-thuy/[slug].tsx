@@ -11,6 +11,10 @@ import Share from "../../components/common/Share";
 import Link from "next/link";
 import Image from "next/image";
 import { trimText } from "../../utils/helper";
+import {
+  normalizeSiteImageUrl,
+  rewriteCloudinaryImageUrls,
+} from "../../utils/imageUrls";
 
 type PostData = {
   id: string;
@@ -64,9 +68,10 @@ const host = "https://greenlahome.vn/goc-phong-thuy";
 const getPostHref = (post: { slug: string; isDirectPost?: boolean }) =>
   post.isDirectPost ? `/${post.slug}` : `/bai-viet/${post.slug}`;
 
-export const APP_NAME = "Greenla Home";
+export const APP_NAME = "Greenlahome";
 const SinglePost: NextPage<Props> = ({ post }) => {
   const { title, content, meta, slug, thumbnail, category, createdAt, relatedPosts } = post;
+  const processedContent = rewriteCloudinaryImageUrls(content);
 
   return (
     <DefaultLayout>
@@ -95,7 +100,7 @@ const SinglePost: NextPage<Props> = ({ post }) => {
               <b>{category}</b>
             </div>
             <div className="blog prose prose-lg dark:prose-invert max-w-2xl md:max-w-4xl lg:max-w-5xl">
-              {parse(content)}
+              {parse(processedContent || content)}
             </div>
           </div>
         </div>
@@ -155,6 +160,7 @@ export const getServerSideProps: GetServerSideProps<
 > = async ({ params }) => {
   try {
     await db.connectDb();
+    const baseUrl = process.env.NEXT_PUBLIC_HOST || "https://greenlahome.vn";
 
     const post = await Post.findOne({ slug: params?.slug });
     if (!post) {
@@ -175,32 +181,33 @@ export const getServerSideProps: GetServerSideProps<
       title: p.title,
       slug: p.slug,
       category: p.category || "Uncategorized",
-      thumbnail: p.thumbnail?.url,
+      thumbnail: normalizeSiteImageUrl(p.thumbnail?.url, baseUrl, "/banner4.png"),
       isDirectPost: p.isDirectPost || false,
     }));
 
     const { _id, title, content, meta, slug, tags, thumbnail, category, createdAt } = post;
+    const thumbnailUrl = normalizeSiteImageUrl(thumbnail?.url, baseUrl, "/banner4.png");
 
     const metaData: MetaData = {
       title,
       description: meta,
-      author: "Greenla Home",
-      canonical: `https://greenlahome.vn/goc-phong-thuy/${slug}`,
+      author: "Greenlahome",
+      canonical: `${baseUrl}/goc-phong-thuy/${slug}`,
       og: {
         title,
         description: meta,
         type: "website",
-        image: thumbnail?.url || "https://greenlahome.vn/banner4.png",
+        image: thumbnailUrl,
         imageWidth: "1200",
         imageHeight: "630",
-        url: `https://greenlahome.vn/goc-phong-thuy/${slug}`,
-        siteName: "Greenla Home",
+        url: `${baseUrl}/goc-phong-thuy/${slug}`,
+        siteName: "Greenlahome",
       },
       twitter: {
         card: "summary_large_image",
         title,
         description: meta,
-        image: thumbnail?.url || "https://greenlahome.vn/banner4.png",
+        image: thumbnailUrl,
       },
     };
 
@@ -212,7 +219,7 @@ export const getServerSideProps: GetServerSideProps<
       slug,
       tags,
       category,
-      thumbnail: thumbnail?.url || "",
+      thumbnail: thumbnailUrl,
       createdAt: createdAt.toString(),
       relatedPosts,
     };

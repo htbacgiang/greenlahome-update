@@ -86,31 +86,31 @@ export default function ThiCongNoiThatGoCongNghiep({ relatedPosts, meta }) {
   }, []);
   // Định nghĩa safeMeta
   const defaultMeta = {
-    title: "Thi Công Nội Thất Gỗ Công Nghiệp Trọn Gói – GreenLa Home",
+    title: "Thi Công Nội Thất Gỗ Công Nghiệp Trọn Gói – Greenlahome",
     description:
-      "GreenLa Home cung cấp dịch vụ thi công nội thất trọn gói cho chung cư, nhà phố với giải pháp gỗ công nghiệp hiện đại, tối ưu chi phí và thẩm mỹ.",
+      "Greenlahome cung cấp dịch vụ thi công nội thất trọn gói cho chung cư, nhà phố với giải pháp gỗ công nghiệp hiện đại, tối ưu chi phí và thẩm mỹ.",
     keywords:
-      "thi công nội thất trọn gói, nội thất chung cư, nội thất nhà phố, nội thất gỗ công nghiệp, GreenLa Home, thiết kế nội thất",
+      "thi công nội thất trọn gói, nội thất chung cư, nội thất nhà phố, nội thất gỗ công nghiệp, Greenlahome, thiết kế nội thất",
     robots: "index, follow",
-    author: "GreenLa Home",
+    author: "Greenlahome",
     canonical: "https://greenlahome.vn/thi-cong-noi-that-go-cong-nghiep",
     og: {
-      title: "Thi Công Nội Thất Gỗ Công Nghiệp Trọn Gói – GreenLa Home",
+      title: "Thi Công Nội Thất Gỗ Công Nghiệp Trọn Gói – Greenlahome",
       description:
-        "Khám phá dịch vụ thi công nội thất trọn gói từ GreenLa Home: chung cư, nhà phố, gỗ công nghiệp chất lượng cao, tối ưu chi phí.",
+        "Khám phá dịch vụ thi công nội thất trọn gói từ Greenlahome: chung cư, nhà phố, gỗ công nghiệp chất lượng cao, tối ưu chi phí.",
       type: "website",
       image: "https://greenlahome.vn/images/noi-that-tan-truong-giang.jpg",
       imageWidth: "1200",
       imageHeight: "630",
       url: "https://greenlahome.vn/thi-cong-noi-that-go-cong-nghiep",
-      siteName: "GreenLa Home",
+      siteName: "Greenlahome",
       locale: "vi_VN",
     },
     twitter: {
       card: "summary_large_image",
-      title: "Thi Công Nội Thất Gỗ Công Nghiệp Trọn Gói – GreenLa Home",
+      title: "Thi Công Nội Thất Gỗ Công Nghiệp Trọn Gói – Greenlahome",
       description:
-        "Dịch vụ thi công nội thất trọn gói chuyên nghiệp cho chung cư, nhà phố từ GreenLa Home, tối ưu chi phí và thẩm mỹ.",
+        "Dịch vụ thi công nội thất trọn gói chuyên nghiệp cho chung cư, nhà phố từ Greenlahome, tối ưu chi phí và thẩm mỹ.",
       image: "https://greenlahome.vn/images/noi-that-tan-truong-giang.jpg",
       site: "@GreenLaHome",
     },
@@ -145,11 +145,11 @@ export default function ThiCongNoiThatGoCongNghiep({ relatedPosts, meta }) {
     serviceType: "Thi công nội thất trọn gói",
     provider: {
       "@type": "Organization",
-      name: "GreenLa Home",
+      name: "Greenlahome",
       url: "https://greenlahome.vn",
       logo: "https://greenlahome.vn/greenlahomelogo.png",
       description:
-        "GreenLa Home chuyên thiết kế và thi công nội thất chung cư, nhà phố, nội thất chọn gói gỗ công nghiệp chất lượng cao, tối ưu chi phí và thẩm mỹ.",
+        "Greenlahome chuyên thiết kế và thi công nội thất chung cư, nhà phố, nội thất chọn gói gỗ công nghiệp chất lượng cao, tối ưu chi phí và thẩm mỹ.",
       address: {
         "@type": "PostalAddress",
         streetAddress: "Số 10 lô C5, KDT Geleximco Lê Trọng Tấn, Hà Đông",
@@ -164,7 +164,7 @@ export default function ThiCongNoiThatGoCongNghiep({ relatedPosts, meta }) {
       },
     },
     description:
-      "GreenLa Home cung cấp dịch vụ thi công nội thất trọn gói cho chung cư, nhà phố với giải pháp gỗ công nghiệp hiện đại, tối ưu chi phí và thẩm mỹ.",
+      "Greenlahome cung cấp dịch vụ thi công nội thất trọn gói cho chung cư, nhà phố với giải pháp gỗ công nghiệp hiện đại, tối ưu chi phí và thẩm mỹ.",
     areaServed: "Việt Nam",
   };
   <Head>
@@ -233,7 +233,7 @@ export default function ThiCongNoiThatGoCongNghiep({ relatedPosts, meta }) {
       <div className="relative w-full h-[30vh] md:h-[40vh]">
         <Image
           src="/images/noi-that-1.jpg"
-          alt="Thi công nội thất trọn gói - GreenLa Home"
+          alt="Thi công nội thất trọn gói - Greenlahome"
           layout="fill"
           objectFit="cover"
           className="brightness-50"
@@ -253,10 +253,10 @@ export default function ThiCongNoiThatGoCongNghiep({ relatedPosts, meta }) {
             </p>
           </nav>
           <h1 className="text-xl md:text-2xl font-bold text-white">
-            Thi công nội thất trọn gói – GreenLa Home
+            Thi công nội thất trọn gói – Greenlahome
           </h1>
           <p className="text-sm md:text-lg mt-2 max-w-5xl text-gray-200">
-            GreenLa Home mang đến giải pháp thi công nội thất trọn gói hiện đại, tối ưu hóa không gian sống với sự kết hợp hoàn hảo giữa thẩm mỹ và công năng.
+            Greenlahome mang đến giải pháp thi công nội thất trọn gói hiện đại, tối ưu hóa không gian sống với sự kết hợp hoàn hảo giữa thẩm mỹ và công năng.
           </p>
         </div>
       </div>
@@ -398,18 +398,18 @@ export const getServerSideProps = async () => {
     const formattedPosts = formatPosts(posts);
 
     const meta = {
-      title: "Thi công nội thất trọn gói – GreenLa Home",
+      title: "Thi công nội thất trọn gói – Greenlahome",
       description:
-        "GreenLa Home cung cấp dịch vụ thi công nội thất trọn gói cho chung cư, nhà phố với giải pháp gỗ công nghiệp hiện đại, tối ưu chi phí và thẩm mỹ.",
+        "Greenlahome cung cấp dịch vụ thi công nội thất trọn gói cho chung cư, nhà phố với giải pháp gỗ công nghiệp hiện đại, tối ưu chi phí và thẩm mỹ.",
       keywords:
-        "thi công nội thất trọn gói, nội thất chung cư, nội thất nhà phố, nội thất gỗ công nghiệp, GreenLa Home, thiết kế nội thất",
+        "thi công nội thất trọn gói, nội thất chung cư, nội thất nhà phố, nội thất gỗ công nghiệp, Greenlahome, thiết kế nội thất",
       robots: "index, follow",
-      author: "GreenLa Home",
+      author: "Greenlahome",
       canonical: "https://greenlahome.vn/thi-cong-noi-that-tron-goi",
       og: {
-        title: "Thi công nội thất trọn gói – GreenLa Home",
+        title: "Thi công nội thất trọn gói – Greenlahome",
         description:
-          "Khám phá dịch vụ thi công nội thất trọn gói từ GreenLa Home: chung cư, nhà phố, gỗ công nghiệp chất lượng cao, tối ưu chi phí.",
+          "Khám phá dịch vụ thi công nội thất trọn gói từ Greenlahome: chung cư, nhà phố, gỗ công nghiệp chất lượng cao, tối ưu chi phí.",
         type: "website",
         image: "https://greenlahome.vn/images/noi-that-tan-truong-giang.jpg",
         imageWidth: "1200",
@@ -418,9 +418,9 @@ export const getServerSideProps = async () => {
       },
       twitter: {
         card: "summary_large_image",
-        title: "Thi công nội thất trọn gói – GreenLa Home",
+        title: "Thi công nội thất trọn gói – Greenlahome",
         description:
-          "Dịch vụ thi công nội thất trọn gói chuyên nghiệp cho chung cư, nhà phố từ GreenLa Home, tối ưu chi phí và thẩm mỹ.",
+          "Dịch vụ thi công nội thất trọn gói chuyên nghiệp cho chung cư, nhà phố từ Greenlahome, tối ưu chi phí và thẩm mỹ.",
         image: "https://greenlahome.vn/images/noi-that-tan-truong-giang.jpg",
       },
     };
@@ -437,8 +437,8 @@ export const getServerSideProps = async () => {
       props: {
         relatedPosts: [],
         meta: {
-          title: "Thi công nội thất trọn gói – GreenLa Home",
-          description: "Dịch vụ thi công nội thất trọn gói chuyên nghiệp từ GreenLa Home.",
+          title: "Thi công nội thất trọn gói – Greenlahome",
+          description: "Dịch vụ thi công nội thất trọn gói chuyên nghiệp từ Greenlahome.",
           canonical: "https://greenlahome.vn/thi-cong-noi-that-tron-goi",
         },
       },

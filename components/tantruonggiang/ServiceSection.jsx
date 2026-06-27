@@ -25,8 +25,8 @@ export default function ServiceSection() {
     <section className="bg-black py-12">
       <div className="container mx-auto px-4">
         {/* Title */}
-        <h2 className="text-center text-green-500 text-2xl md:text-3xl font-bold uppercase mb-8">
-          Dịch vụ thi công nội thất tại Greenla Home có gì?
+        <h2 className="text-center text-[#EAD5B0] text-2xl md:text-3xl font-bold uppercase mb-8">
+          Dịch vụ thi công nội thất tại Greenlahome có gì?
         </h2>
 
         {/* Grid of Images */}

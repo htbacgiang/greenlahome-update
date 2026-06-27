@@ -11,7 +11,7 @@ export default function AboutNavigation() {
     {
       title: "Triết Lý Kinh Doanh",
       description:
-        "GreenLa Home mang đến giải pháp nội thất hiện đại, sáng tạo, ứng dụng công nghệ AI, tạo không gian sống và làm việc lý tưởng.",
+        "Greenlahome mang đến giải pháp nội thất hiện đại, sáng tạo, ứng dụng công nghệ AI, tạo không gian sống và làm việc lý tưởng.",
     },
     {
       title: "Tầm Nhìn",

@@ -24,7 +24,7 @@ export default function LoginPage() {
               <input
                 type="text"
                 id="email"
-                className="mt-1 block w-full border-green-500 rounded-lg shadow-md focus:ring-2 focus:ring-green-500 focus:border-green-500 sm:text-sm px-4 py-2 bg-gray-50"
+                className="mt-1 block w-full border-[#F9F3E8]0 rounded-lg shadow-md focus:ring-2 focus:ring-green-500 focus:border-[#F9F3E8]0 sm:text-sm px-4 py-2 bg-gray-50"
                 placeholder="Email hoặc Số điện thoại"
               />
             </div>
@@ -36,7 +36,7 @@ export default function LoginPage() {
               <input
                 type={showPassword ? "text" : "password"}
                 id="password"
-                className="mt-1 block w-full border-green-500 rounded-lg shadow-md focus:ring-2 focus:ring-green-500 focus:border-green-500 sm:text-sm px-4 py-2 bg-gray-50 pr-10"
+                className="mt-1 block w-full border-[#F9F3E8]0 rounded-lg shadow-md focus:ring-2 focus:ring-green-500 focus:border-[#F9F3E8]0 sm:text-sm px-4 py-2 bg-gray-50 pr-10"
                 placeholder="Nhập Mật Khẩu"
               />
               <div

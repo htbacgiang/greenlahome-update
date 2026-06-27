@@ -97,10 +97,10 @@ export default function ContactForm() {
                 Đăng ký tư vấn
               </h2>
               <h3 className="text-xl font-bold text-gray-900 mb-4">
-                Thiết kế nội thất đẳng cấp cùng Greenla Home
+                Thiết kế nội thất đẳng cấp cùng Greenlahome
               </h3>
               <p className="text-lg text-gray-600">
-                Greenla Home mang đến giải pháp nội thất chuyên nghiệp, hiện đại và phù hợp với mọi không gian sống.
+                Greenlahome mang đến giải pháp nội thất chuyên nghiệp, hiện đại và phù hợp với mọi không gian sống.
               </p>
               <p>Đăng ký ngay để được tư vấn miễn phí!</p>
             </div>

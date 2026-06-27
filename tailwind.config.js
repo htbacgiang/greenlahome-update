@@ -13,8 +13,8 @@ module.exports = {
       },
       keyframes: {
         blink: {
-          "0%, 100%": { backgroundColor: "rgb(34, 197, 94)" }, // màu xanh
-          "50%": { backgroundColor: "#f97316" }, // màu đỏ
+          "0%, 100%": { backgroundColor: "#EAD5B0" }, // màu kem vàng
+          "50%": { backgroundColor: "#f97316" }, // màu đỏ cam
         },
       },
       fontFamily: {
@@ -31,14 +31,27 @@ module.exports = {
           dark: "#707070",
           light: "#e6e6e6",
         },
-        action: "#3B82F6",
+        action: "#EAD5B0",
+        // Brand color palette
+        brand: {
+          50:  "#FBF6ED",
+          100: "#F3E8D0",
+          200: "#EAD5B0",
+          300: "#D4BA95",
+          400: "#C4A882",
+          500: "#B89468",
+          600: "#A0845A",
+          700: "#8B6A3A",
+          800: "#6E5230",
+          900: "#4A3720",
+        },
       },
       transitionProperty: {
         width: "width",
       },
       // Thêm textShadow để tạo hiệu ứng phát sáng
       textShadow: {
-        glow: "0 0 4px rgba(34, 197, 94, 0.8)", // Hiệu ứng phát sáng màu xanh lá cây (green-500)
+        glow: "0 0 4px rgba(234, 213, 176, 0.8)", // Hiệu ứng phát sáng màu kem vàng
       },
       colors: {
         'q8-primary': {
@@ -57,7 +70,7 @@ module.exports = {
     },
     backgroundImage: {
       "png-pattern": "url('/empty-bg.jpg')",
-      "gradient-to-b": "linear-gradient(to bottom, #22c55e, #16a34a)", // Gradient xanh lá
+      "gradient-to-b": "linear-gradient(to bottom, #EAD5B0, #C4A882)", // Gradient kem vàng
     },
     
   },
@@ -68,7 +81,7 @@ module.exports = {
     function ({ addUtilities }) {
       const newUtilities = {
         ".text-shadow-glow": {
-          textShadow: "0 0 4px rgba(34, 197, 94, 0.8)",
+          textShadow: "0 0 4px rgba(234, 213, 176, 0.8)",
         },
       };
       addUtilities(newUtilities, ["responsive", "hover"]);

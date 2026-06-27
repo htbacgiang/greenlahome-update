@@ -16,7 +16,7 @@ const ProjectCard = ({ project, onQuoteClick }) => {
         />
         <div className="absolute inset-0 flex items-center justify-center space-x-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
           <button
-            className="flex items-center bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-orange-600 transition-colors focus:outline-none focus:ring-2 focus:ring-orange-400"
+            className="flex items-center bg-[#EAD5B0] text-white px-4 py-2 rounded-lg hover:bg-orange-600 transition-colors focus:outline-none focus:ring-2 focus:ring-orange-400"
             onClick={onQuoteClick}
             aria-label={`Yêu cầu báo giá cho ${project.title}`}
           >

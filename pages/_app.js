@@ -13,6 +13,7 @@ import "../styles/seo-analysis.css";
 import "../styles/editor.css";
 import "../styles/q8design.css";
 import Head from "next/head";
+import { normalizeSiteImageUrl } from "../utils/imageUrls";
 
 const persistor = typeof window !== "undefined" ? persistStore(store) : null;
 
@@ -34,32 +35,51 @@ const rajdhani = Rajdhani({
 });
 
 function MyApp({ Component, pageProps: { session, meta, ...pageProps } }) {
+  const siteUrl = process.env.NEXT_PUBLIC_HOST || "https://greenlahome.vn";
+  const normalizedMeta = meta
+    ? {
+        ...meta,
+        og: meta.og
+          ? {
+              ...meta.og,
+              image: normalizeSiteImageUrl(meta.og.image, siteUrl),
+            }
+          : meta.og,
+        twitter: meta.twitter
+          ? {
+              ...meta.twitter,
+              image: normalizeSiteImageUrl(meta.twitter.image, siteUrl),
+            }
+          : meta.twitter,
+      }
+    : null;
+
   return (
     <>
       {/* Render meta tags từ pageProps */}
-      {meta && (
+      {normalizedMeta && (
         <Head>
-          <title>{meta.title}</title>
-          <meta name="description" content={meta.description} />
-          <meta name="keywords" content={meta.keywords} />
-          <meta name="robots" content={meta.robots} />
-          <meta name="author" content={meta.author} />
-          <link rel="canonical" href={meta.canonical} />
+          <title>{normalizedMeta.title}</title>
+          <meta name="description" content={normalizedMeta.description} />
+          <meta name="keywords" content={normalizedMeta.keywords} />
+          <meta name="robots" content={normalizedMeta.robots} />
+          <meta name="author" content={normalizedMeta.author} />
+          <link rel="canonical" href={normalizedMeta.canonical} />
 
           {/* Open Graph */}
-          <meta property="og:title" content={meta.og?.title} />
-          <meta property="og:description" content={meta.og?.description} />
-          <meta property="og:type" content={meta.og?.type} />
-          <meta property="og:image" content={meta.og?.image} />
-          <meta property="og:image:width" content={meta.og?.imageWidth} />
-          <meta property="og:image:height" content={meta.og?.imageHeight} />
-          <meta property="og:url" content={meta.og?.url} />
+          <meta property="og:title" content={normalizedMeta.og?.title} />
+          <meta property="og:description" content={normalizedMeta.og?.description} />
+          <meta property="og:type" content={normalizedMeta.og?.type} />
+          <meta property="og:image" content={normalizedMeta.og?.image} />
+          <meta property="og:image:width" content={normalizedMeta.og?.imageWidth} />
+          <meta property="og:image:height" content={normalizedMeta.og?.imageHeight} />
+          <meta property="og:url" content={normalizedMeta.og?.url} />
 
           {/* Twitter Cards */}
-          <meta name="twitter:card" content={meta.twitter?.card} />
-          <meta name="twitter:title" content={meta.twitter?.title} />
-          <meta name="twitter:description" content={meta.twitter?.description} />
-          <meta name="twitter:image" content={meta.twitter?.image} />
+          <meta name="twitter:card" content={normalizedMeta.twitter?.card} />
+          <meta name="twitter:title" content={normalizedMeta.twitter?.title} />
+          <meta name="twitter:description" content={normalizedMeta.twitter?.description} />
+          <meta name="twitter:image" content={normalizedMeta.twitter?.image} />
           <meta name="google-site-verification" content="Guo-bobkr2INf1rOD4cc1AbPyp9IPNEiD2v0WJSVaDs" />
         </Head>
       )}

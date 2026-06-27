@@ -173,7 +173,7 @@ export default function ProjectsPage({ showHero = true }) {
           <div className="absolute inset-0">
             <Image
               src="/images/xu-huong-vat-lieu-ben-vung-2025.webp"
-              alt="Greenla Home Projects"
+              alt="Greenlahome Projects"
               fill
               className="object-cover brightness-50"
               priority
@@ -187,7 +187,7 @@ export default function ProjectsPage({ showHero = true }) {
               Không gian sống
             </h2>
             <p className="text-xl text-q8-primary-50 max-w-4xl mx-auto leading-relaxed">
-              Mỗi dự án tại Greenla Home là một hành trình sáng tạo, nơi chúng tôi biến ý tưởng của bạn
+              Mỗi dự án tại Greenlahome là một hành trình sáng tạo, nơi chúng tôi biến ý tưởng của bạn
               thành một không gian sống độc đáo. Khám phá các công trình đã hoàn thiện của chúng tôi.
             </p>
           </div>

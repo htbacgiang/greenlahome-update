@@ -3,7 +3,7 @@ import { useState } from 'react';
 
 const FurnitureViewer = ({ 
   model3D = "https://www.jegaai.com/720/S5DDIGDJCI", 
-  projectTitle = "GreenLa Home" 
+  projectTitle = "Greenlahome" 
 }) => {
   const [isLoading, setIsLoading] = useState(true);
   
@@ -19,7 +19,7 @@ const FurnitureViewer = ({
         <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-3 uppercase">
           Khám Phá Không Gian 3D & VR
         </h2>
-        <div className="w-20 h-1 bg-green-600 mx-auto mb-4"></div>
+        <div className="w-20 h-1 bg-[#C4A882] mx-auto mb-4"></div>
         <p className="text-gray-600 max-w-2xl mx-auto">
           Trải nghiệm thực tế ảo đỉnh cao, giúp bạn hình dung căn hộ tương lai một cách chân thực và trực quan nhất.
         </p>
@@ -58,7 +58,7 @@ const FurnitureViewer = ({
       <div className="mt-8 text-center bg-gray-50 p-6 rounded-2xl border border-gray-100">
         <p className="text-gray-600 max-w-3xl mx-auto leading-relaxed">
           Sử dụng chuột hoặc ngón tay để xoay 360 độ, phóng to/thu nhỏ và nhấn vào các điểm điều hướng để di chuyển giữa các phòng. 
-          Công nghệ VR mang đến cái nhìn chi tiết về vật liệu, ánh sáng và bố cục không gian thiết kế của <span className="font-bold text-green-700">GreenLa Home</span>.
+          Công nghệ VR mang đến cái nhìn chi tiết về vật liệu, ánh sáng và bố cục không gian thiết kế của <span className="font-bold text-[#A0845A]">Greenlahome</span>.
         </p>
       </div>
     </div>

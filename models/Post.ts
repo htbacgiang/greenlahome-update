@@ -56,7 +56,7 @@ const PostSchema = new Schema<PostModelSchema>(
     },
     author: {
       type: Schema.Types.ObjectId,
-      ref: "User",
+      ref: "Author",
     },
     isDraft: {
       type: Boolean,

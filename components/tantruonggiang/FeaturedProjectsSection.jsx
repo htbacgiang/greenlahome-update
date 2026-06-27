@@ -7,7 +7,7 @@ export default function FeaturedProjectsSection() {
       <div className="container mx-auto px-4">
         {/* Phần Tiêu đề và Mô tả */}
         <div className="text-center mb-8 md:mb-12">
-          <h2 className="text-2xl md:text-4xl font-bold text-green-400 uppercase">
+          <h2 className="text-2xl md:text-4xl font-bold text-[#EAD5B0] uppercase">
             Dự Án Nổi Bật
           </h2>
           <p className="text-gray-700 mt-4 text-sm md:text-base leading-relaxed max-w-4xl mx-auto">

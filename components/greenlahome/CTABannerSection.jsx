@@ -83,10 +83,10 @@ export default function CTABannerSection() {
           {/* Trái: Tiêu đề + mô tả */}
           <div className="lg:col-span-7">
             <h2 className="font-serif text-3xl md:text-4xl lg:text-4xl font-bold text-white leading-tight mb-6">
-              Hiện thực hóa ngôi nhà mơ ước cùng Greenla Home!
+              Hiện thực hóa ngôi nhà mơ ước cùng Greenlahome!
             </h2>
             <p className="text-[#D3D3D3] text-base md:text-lg leading-relaxed max-w-2xl">
-              Đừng để nỗi lo về kỹ thuật hay vật liệu ngăn cản bạn sở hữu không gian sống thấu cảm. Hãy để Greenla Home cùng bạn viết tiếp chương mới của tổ ấm, bằng sự tử tế và khắt khe nhất.</p>
+              Đừng để nỗi lo về kỹ thuật hay vật liệu ngăn cản bạn sở hữu không gian sống thấu cảm. Hãy để Greenlahome cùng bạn viết tiếp chương mới của tổ ấm, bằng sự tử tế và khắt khe nhất.</p>
           </div>
 
           {/* Phải: Nút CTA + Liên hệ */}
@@ -110,7 +110,7 @@ export default function CTABannerSection() {
                   <FaPhone className="w-4 h-4" />
                 </span>
                 <span className="block">
-                  <span className="block text-white font-semibold">098 811 68 28</span>
+                  <span className="block text-white font-semibold">096.292.2332</span>
                   <span className="block text-[#C0C0C0] text-sm mt-0.5">Gọi tư vấn</span>
                 </span>
               </a>

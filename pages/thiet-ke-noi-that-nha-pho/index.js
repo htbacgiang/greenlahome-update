@@ -91,9 +91,9 @@ export default function ThietKeNoiThatNhaPho({ relatedPosts, meta }) {
     description:
       "Thiết kế nội thất nhà phố chuyên nghiệp, tối ưu không gian sống hiệu quả. Khám phá giải pháp sáng tạo nâng tầm cuộc sống, kiến tạo nhà đẹp, tiện nghi & đẳng cấp!",
     keywords:
-      "thiết kế nội thất nhà phố, nội thất nhà phố, thiết kế nội thất, GreenLa Home, nội thất hiện đại",
+      "thiết kế nội thất nhà phố, nội thất nhà phố, thiết kế nội thất, Greenlahome, nội thất hiện đại",
     robots: "index, follow",
-    author: "GreenLa Home",
+    author: "Greenlahome",
     canonical: "https://greenlahome.vn/thiet-ke-noi-that-nha-pho",
     og: {
       title: "Thiết Kế Nội Thất Nhà Phố – Tối Ưu Không Gian, Nâng Tầm Cuộc Sống",
@@ -104,7 +104,7 @@ export default function ThietKeNoiThatNhaPho({ relatedPosts, meta }) {
       imageWidth: "1200",
       imageHeight: "630",
       url: "https://greenlahome.vn/thiet-ke-noi-that-nha-pho",
-      siteName: "GreenLa Home",
+      siteName: "Greenlahome",
       locale: "vi_VN",
     },
     twitter: {
@@ -146,11 +146,11 @@ export default function ThietKeNoiThatNhaPho({ relatedPosts, meta }) {
     serviceType: "Thiết kế nội thất nhà phố",
     provider: {
       "@type": "Organization",
-      name: "GreenLa Home",
+      name: "Greenlahome",
       url: "https://greenlahome.vn",
       logo: "https://greenlahome.vn/greenlahomelogo.png",
       description:
-        "GreenLa Home chuyên thiết kế và thi công nội thất chung cư, nhà phố, nội thất chọn gói gỗ công nghiệp chất lượng cao, tối ưu chi phí và thẩm mỹ.",
+        "Greenlahome chuyên thiết kế và thi công nội thất chung cư, nhà phố, nội thất chọn gói gỗ công nghiệp chất lượng cao, tối ưu chi phí và thẩm mỹ.",
       address: {
         "@type": "PostalAddress",
         streetAddress: "Số 10 lô C5, KDT Geleximco Lê Trọng Tấn, Hà Đông",
@@ -204,7 +204,7 @@ export default function ThietKeNoiThatNhaPho({ relatedPosts, meta }) {
       <div className="relative w-full h-[30vh] md:h-[40vh]">
         <Image
           src="/images/noi-that-1.jpg"
-          alt="Thiết Kế Nội Thất Nhà Phố - GreenLa Home"
+          alt="Thiết Kế Nội Thất Nhà Phố - Greenlahome"
           layout="fill"
           objectFit="cover"
           className="brightness-50"
@@ -227,7 +227,7 @@ export default function ThietKeNoiThatNhaPho({ relatedPosts, meta }) {
             Thiết kế nội thất nhà phố – Tối ưu không gian, nâng tầm cuộc sống
           </h1>
           <p className="text-sm md:text-lg mt-2 max-w-5xl text-gray-200">
-            Greenla Home mang đến giải pháp thiết kế nội thất nhà phố hiện đại, tối ưu hóa không gian sống với sự kết hợp hoàn hảo giữa thẩm mỹ và công năng.
+            Greenlahome mang đến giải pháp thiết kế nội thất nhà phố hiện đại, tối ưu hóa không gian sống với sự kết hợp hoàn hảo giữa thẩm mỹ và công năng.
           </p>
         </div>
       </div>
@@ -373,9 +373,9 @@ export const getServerSideProps = async () => {
       description:
         "Thiết kế nội thất nhà phố chuyên nghiệp, tối ưu không gian sống hiệu quả. Khám phá giải pháp sáng tạo nâng tầm cuộc sống, kiến tạo nhà đẹp, tiện nghi & đẳng cấp!",
       keywords:
-        "thiết kế nội thất nhà phố, nội thất nhà phố, thiết kế nội thất, GreenLa Home, nội thất hiện đại",
+        "thiết kế nội thất nhà phố, nội thất nhà phố, thiết kế nội thất, Greenlahome, nội thất hiện đại",
       robots: "index, follow",
-      author: "GreenLa Home",
+      author: "Greenlahome",
       canonical: "https://greenlahome.vn/thiet-ke-noi-that-nha-pho",
       og: {
         title: "Thiết kế nội thất nhà phố – Tối ưu không gian, nâng tầm cuộc sống",
@@ -408,9 +408,9 @@ export const getServerSideProps = async () => {
       props: {
         relatedPosts: [],
         meta: {
-          title: "Thiết Kế Nội Thất Nhà Phố – GreenLa Home",
+          title: "Thiết Kế Nội Thất Nhà Phố – Greenlahome",
           description:
-            "Dịch vụ thiết kế nội thất nhà phố chuyên nghiệp từ GreenLa Home.",
+            "Dịch vụ thiết kế nội thất nhà phố chuyên nghiệp từ Greenlahome.",
           canonical: "https://greenlahome.vn/thiet-ke-noi-that-nha-pho",
         },
       },

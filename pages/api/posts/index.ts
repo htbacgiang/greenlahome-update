@@ -117,6 +117,11 @@ const createNewPost: NextApiHandler = async (req, res) => {
         existingPost.isDraft = parsedIsDraft;
       }
 
+      const authorVal = getFieldValue((body as any).author);
+      if (authorVal) {
+        existingPost.author = authorVal;
+      }
+
       const thumbnailUrl = (body as any).thumbnail as string | undefined;
       const thumbnailFile = files.thumbnail as formidable.File | undefined;
       if (thumbnailFile) {
@@ -150,6 +155,7 @@ const createNewPost: NextApiHandler = async (req, res) => {
     const isDirectPost = parseBooleanField((body as any).isDirectPost);
 
     // Tạo bài viết mới
+    const authorVal = getFieldValue((body as any).author);
     const newPost = new Post({
       title,
       content,
@@ -157,7 +163,7 @@ const createNewPost: NextApiHandler = async (req, res) => {
       meta,
       tags,
       category,
-      author: session.user.sub,
+      author: authorVal || session.user.sub,
       isDraft: false,
       isFeatured: isFeatured || false,
       isDirectPost: isDirectPost || false,

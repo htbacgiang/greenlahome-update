@@ -7,6 +7,10 @@ import Share from "../components/common/Share";
 import Link from "next/link";
 import Image from "next/image";
 import { trimText } from "../utils/helper";
+import {
+  normalizeSiteImageUrl,
+  rewriteCloudinaryImageUrls,
+} from "../utils/imageUrls";
 
 type PostData = {
   id: string;
@@ -61,21 +65,13 @@ type Props = {
 
 const host = process.env.NEXT_PUBLIC_HOST || "https://greenlahome.vn";
 
-const normalizeImageUrl = (imageUrl: string | undefined, baseUrl: string): string => {
-  if (!imageUrl) return `${baseUrl}/images/noi-that-1.jpg`;
-  if (imageUrl.startsWith("http://") || imageUrl.startsWith("https://")) {
-    return imageUrl;
-  }
-  return `${baseUrl}${imageUrl.startsWith("/") ? imageUrl : `/${imageUrl}`}`;
-};
-
 const getPostHref = (post: { slug: string; isDirectPost?: boolean }) =>
   post.isDirectPost ? `/${post.slug}` : `/bai-viet/${post.slug}`;
 
 const processPostContent = (content: string) => {
   if (!content) return content;
 
-  return content.replace(
+  return rewriteCloudinaryImageUrls(content).replace(
     /(<figure[^>]*>[\s\S]*?<\/figure>)|<img([^>]*)>/gi,
     (match, figureTag, imgAttrs) => {
       if (figureTag || !imgAttrs) return match;
@@ -258,35 +254,35 @@ export const getServerSideProps: GetServerSideProps<
       title: p.title,
       slug: p.slug,
       category: p.category || "Uncategorized",
-      thumbnail: normalizeImageUrl(p.thumbnail?.url, baseUrl),
+      thumbnail: normalizeSiteImageUrl(p.thumbnail?.url, baseUrl),
       createdAt: p.createdAt.toString(),
       isDirectPost: p.isDirectPost || false,
     }));
 
     const { _id, title, content, meta, slug, tags, thumbnail, category, createdAt } = post;
-    const thumbnailUrl = normalizeImageUrl(thumbnail?.url, baseUrl);
-    const truncatedDescription = trimText(meta, 160) || `Đọc bài viết "${title}" từ GreenLa Home.`;
+    const thumbnailUrl = normalizeSiteImageUrl(thumbnail?.url, baseUrl);
+    const truncatedDescription = trimText(meta, 160) || `Đọc bài viết "${title}" từ Greenlahome.`;
 
     const metaData: MetaData = {
-      title: `${title} | GreenLa Home`,
+      title: `${title} | Greenlahome`,
       description: truncatedDescription,
-      keywords: `${title}, thiết kế nội thất, GreenLa Home, kiến trúc, trang trí nhà, ${category}`,
+      keywords: `${title}, thiết kế nội thất, Greenlahome, kiến trúc, trang trí nhà, ${category}`,
       robots: "index, follow",
-      author: "GreenLa Home",
+      author: "Greenlahome",
       canonical: `${baseUrl}/${slug}`,
       og: {
-        title: `${title} | GreenLa Home`,
+        title: `${title} | Greenlahome`,
         description: truncatedDescription,
         type: "article",
         image: thumbnailUrl,
         imageWidth: "1200",
         imageHeight: "630",
         url: `${baseUrl}/${slug}`,
-        siteName: "GreenLa Home",
+        siteName: "Greenlahome",
       },
       twitter: {
         card: "summary_large_image",
-        title: `${title} | GreenLa Home`,
+        title: `${title} | Greenlahome`,
         description: truncatedDescription,
         image: thumbnailUrl,
       },

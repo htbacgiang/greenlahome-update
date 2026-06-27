@@ -28,7 +28,7 @@ const UserDropdown = ({ userDropdownOpen, toggleUserDropdown }) => {
           <div className="border-t px-4 py-2">
             <div className="flex justify-between text-sm">
               <div>
-                <p className="font-semibold text-green-500">2</p>
+                <p className="font-semibold text-[#EAD5B0]">2</p>
                 <p>Daily Download</p>
               </div>
               <div>

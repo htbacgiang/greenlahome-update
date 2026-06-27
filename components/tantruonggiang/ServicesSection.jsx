@@ -1,74 +1,166 @@
+"use client";
+
+import { useRef, useEffect, useState } from "react";
+import Image from "next/image";
 import Link from "next/link";
-import { FaHome, FaBuilding, FaTools } from "react-icons/fa";
+import { motion, useInView, useScroll, useTransform } from "framer-motion";
 
 export default function ServicesSection() {
+  const containerRef = useRef(null);
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start end", "end start"]
+  });
+  const [isDesktop, setIsDesktop] = useState(false);
+  useEffect(() => {
+    const mq = window.matchMedia("(min-width: 768px)");
+    const handler = (e) => setIsDesktop(e.matches);
+    setIsDesktop(mq.matches);
+    mq.addEventListener("change", handler);
+    return () => mq.removeEventListener("change", handler);
+  }, []);
+
+  const xTransform = useTransform(
+    scrollYProgress,
+    [0, 0.35, 0.7],
+    isDesktop ? [800, 0, -800] : [200, 0, -200]
+  );
+
   const services = [
     {
-      title: "Thiết Kế Nội Thất Chung Cư",
-      icon: <FaBuilding className="text-3xl" />,
-      description: "GREENLAHOME mang đến giải pháp thiết kế nội thất hiện đại, bền vững, ứng dụng công nghệ AI tiên tiến. Chúng tôi tạo nên không gian sống đậm chất cá nhân, đáp ứng nhanh chóng và phù hợp với từng khách hàng.",
-      link: "/thiet-ke-noi-that-chung-cu"
+      overline: "Thiết kế. Sáng tạo.",
+      title: "Nội thất nhà phố",
+      description:
+        "Thiết kế nội thất nhà phố tối ưu không gian và công năng",
+      slug: "thiet-ke-kien-truc",
+      icon: "/icons/blueprint.png",
+
     },
     {
-      title: "Thiết Kế Nội Thất Nhà Phố",
-      icon: <FaHome className="text-3xl" />,
-      description: "GREENLAHOME cam kết mang đến sản phẩm tinh tế, bền vững với độ bền cao. Sử dụng hệ thống máy móc hiện đại và công nghệ tiên tiến, cùng đội ngũ thi công lành nghề và giám sát chuyên môn cao.",
-      link: "/thiet-ke-noi-that-nha-pho"
+      overline: "Không gian. Cảm xúc.",
+      title: "Nội thất chung cư",
+      description:
+        "Thiết kế nội thất chung cư tối ưu không gian và công năng",
+      icon: "/icons/livingroom.png",
+      slug: "thiet-ke-noi-that",
     },
     {
-      title: "Thi Công Nội Thất Trọn Gói",
-      icon: <FaTools className="text-3xl" />,
-      description: "GREENLAHOME hợp tác với các thương hiệu ván hàng đầu như An Cường, Minh Long. Sử dụng ván gỗ MDF đạt chuẩn E0, E1, đảm bảo thân thiện với môi trường và an toàn tuyệt đối cho người sử dụng.",
-      link: "/thi-cong-noi-that-tron-goi"
-    }
+      overline: "Chuyên nghiệp. Chuẩn chỉ.",
+      title: "Thi công trọn gói",
+      description:
+        "Thi công đúng tiến độ, đảm bảo chất lượng và thẩm mỹ theo thiết kế.",
+      icon: "/icons/architect.png",
+      slug: "thi-cong-tron-goi",
+    },
+    {
+      overline: "Tái tạo. Nâng tầm.",
+      title: "Cải tạo không gian",
+      description:
+        "Hồi sinh không gian cũ, tối ưu công năng và thẩm mỹ cho ngôi nhà bạn.",
+      icon: "/icons/house.png",
+      slug: "cai-tao-noi-that",
+    },
   ];
 
+  const gridRef = useRef(null);
+  const isGridInView = useInView(gridRef, { once: true, amount: 0.15 });
+
+  const itemVariants = (i) => ({
+    hidden: { opacity: 0, x: i % 2 === 0 ? -24 : 24, y: 12 },
+    visible: {
+      opacity: 1,
+      x: 0,
+      y: 0,
+      transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1], delay: i * 0.05 },
+    },
+  });
+
+
+  const cardVariants = (fromLeft) => ({
+    hidden: {
+      opacity: 0,
+      x: fromLeft ? -32 : 32,
+    },
+    visible: (i) => ({
+      opacity: 1,
+      x: 0,
+      transition: {
+        duration: 0.9,
+        delay: (fromLeft ? i : i - 2) * 0.2,
+        ease: [0.22, 1, 0.36, 1],
+      },
+    }),
+  });
+
   return (
-    <section className="py-12 md:py-16">
-      <div className="container mx-auto px-4">
-        <div className="mx-auto mb-8 max-w-5xl text-center md:mb-12">
-          <span className="inline-flex rounded-full border border-green-200 bg-white px-4 py-2 text-xs font-bold uppercase tracking-widest text-green-700 shadow-sm">
-            Dịch vụ tại GreenLaHome
-          </span>
-          <h2 className="mt-4 text-3xl font-bold leading-tight text-gray-950 md:text-4xl">
-            Giải pháp nội thất hiện đại, tinh gọn và đúng nhu cầu
+    <section ref={containerRef} className="relative py-12 bg-white overflow-hidden">
+
+
+      <div className="container mx-auto px-4 relative z-10">
+        <div className="mb-10">
+          <h2 className="flex items-center gap-2 text-[var(--q8-primary-600)] text-sm font-bold uppercase mb-2">
+            Dịch vụ của GreenLaHome
           </h2>
+          <p className="text-[#7a6a5e] mt-2">
+            Giải pháp trọn gói cho kiến trúc và nội thất cao cấp
+          </p>
         </div>
 
-        <div className="grid grid-cols-1 gap-5 md:grid-cols-3 lg:gap-6">
-          {services.map((service, index) => (
-            <Link href={service.link} key={index} className="group block h-full">
-              <article className="flex h-full flex-col rounded-2xl border border-gray-100 bg-white p-6 shadow-[0_12px_40px_rgba(15,23,42,0.06)] transition duration-300 hover:-translate-y-1 hover:border-green-200 hover:shadow-[0_18px_50px_rgba(15,23,42,0.1)] md:p-7">
-                <div className="mb-6 flex items-center justify-between gap-4">
-                  <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-green-50 text-green-700 transition duration-300 group-hover:bg-green-600 group-hover:text-white">
-                    {service.icon}
-                  </div>
-                  <span className="text-sm font-semibold text-gray-300">
-                    0{index + 1}
-                  </span>
-                </div>
-
-                <h3 className="text-xl font-bold leading-snug text-gray-950 transition duration-300 group-hover:text-green-700">
-                  {service.title}
-                </h3>
-
-                <div className="my-5 h-px w-full bg-gray-100">
-                  <div className="h-px w-12 bg-green-500 transition-all duration-300 group-hover:w-24" />
-                </div>
-
-                <p className="mb-6 flex-1 text-sm leading-7 text-gray-600 md:text-base">
-                  {service.description}
+        <div ref={gridRef} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
+          {services.map((s, i) => {
+            const isDark = i % 2 === 1;
+            const bg = isDark ? "bg-[#2b201a]" : "bg-[#d8c7b5]";
+            const text = isDark ? "text-white" : "text-[#2b201a]";
+            const subText = isDark ? "text-white/80" : "text-[#6b5a4d]";
+            return (
+              <motion.div
+                key={s.slug}
+                variants={itemVariants(i)}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true, amount: 0.2 }}
+                whileHover={{ y: -6, transition: { duration: 0.25 } }}
+                className={`${bg} p-8 flex flex-col items-center text-center group`}
+              >
+                <p className={`text-xs tracking-widest font-semibold uppercase ${subText}`}>
+                  {s.overline}
                 </p>
-
-                <div className="inline-flex items-center gap-2 text-sm font-bold text-green-700">
-                  <span>Xem chi tiết</span>
-                  <svg className="h-4 w-4 transition duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                <h3 className={`mt-3 text-xl md:text-2xl font-bold ${text}`}>
+                  {s.title}
+                </h3>
+                <motion.div
+                  className="mt-6 h-20 w-20 relative"
+                  whileHover={{ y: -4, transition: { duration: 0.25 } }}
+                >
+                  <Image
+                    src={s.icon}
+                    alt={s.title}
+                    fill
+                    className="object-contain"
+                    style={{ filter: "brightness(0) invert(1)" }}
+                  />
+                </motion.div>
+                <motion.span
+                  className={`mt-3 h-[2px] ${isDark ? "bg-white/60" : "bg-[#2b201a]/60"}`}
+                  initial={{ width: 24, opacity: 0.7 }}
+                  whileHover={{ width: 64, opacity: 1 }}
+                  transition={{ duration: 0.3 }}
+                />
+                <p className={`mt-6 text-sm leading-relaxed max-w-xs ${subText}`}>
+                  {s.description}
+                </p>
+                <Link
+                  href={`/${s.slug}`}
+                  className={`mt-8 inline-flex items-center gap-2 text-sm font-semibold ${text}`}
+                >
+                  Chi tiết dịch vụ
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
                   </svg>
-                </div>
-              </article>
-            </Link>
-          ))}
+                </Link>
+              </motion.div>
+            );
+          })}
         </div>
       </div>
     </section>

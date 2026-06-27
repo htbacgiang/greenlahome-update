@@ -73,48 +73,43 @@ const PostCard: FC<Props> = ({
 
   return (
     <>
-      <div className="bg-gray-900 rounded-lg overflow-hidden shadow-lg flex flex-col">
-        <div className="relative h-56 w-full">
-          {!thumbnail ? (
-            <div className="w-full h-full flex items-center justify-center text-gray-500 text-sm bg-gray-800">
-              Không có hình ảnh
-            </div>
-          ) : (
+      <article className="group bg-white overflow-hidden transition-all duration-500 transform hover:-translate-y-2">
+        {/* Post Image */}
+        <div className="relative h-64 overflow-hidden">
+          {thumbnail ? (
             <Image
               src={thumbnail}
-              fill={true}
               alt={title}
-              className="rounded-t-lg object-cover"
+              fill
+              className="object-cover transition-transform duration-700 group-hover:scale-110"
             />
+          ) : (
+            <div className="w-full h-full bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
+              <span className="text-gray-400 text-4xl">📝</span>
+            </div>
           )}
+          {/* Overlay on hover */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
         </div>
-        <div className="p-4 flex flex-col space-y-2">
-          
-          <Link href={postPath}>
-            <h2 className="text-xl font-bold text-white">{highlightedTitle}</h2>
-          </Link>
-          <p className="text-gray-400 text-sm leading-6">{trimText(meta, 100)}</p>
-          <div className="mt-2 flex items-center text-gray-500 text-sm">
-            <svg
-              className="w-4 h-4 mr-1"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
-              />
+
+        {/* Post Content */}
+        <div className="py-6 px-0">
+          {/* Title */}
+          <h3 className="text-xl font-bold text-gray-900 mb-3 leading-tight group-hover:text-[#A0845A] transition-colors line-clamp-2">
+            <Link href={postPath}>{title}</Link>
+          </h3>
+          {/* Read More */}
+          <Link
+            href={postPath}
+            className="inline-flex items-center text-[#C4A882] hover:text-[#A0845A] font-medium transition-colors group/link"
+          >
+            Đọc thêm
+            <svg className="ml-2 w-4 h-4 transition-transform group-hover/link:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
             </svg>
-            {new Date(createdAt).toLocaleDateString("en-US", {
-              month: "long",
-              day: "numeric",
-              year: "numeric",
-            })}
-          </div>
+          </Link>
+
+          {/* Dashboard controls */}
           {controls && (
             <div className="mt-4 flex justify-between">
               <Link
@@ -126,16 +121,16 @@ const PostCard: FC<Props> = ({
               <button
                 disabled={busy}
                 onClick={() => setShowModal(true)}
-                className={`px-3 py-1 bg-red-500 text-white rounded text-sm ${
-                  busy ? "opacity-50 cursor-not-allowed" : "hover:bg-red-600"
-                }`}
+                className={`px-3 py-1 bg-red-500 text-white rounded text-sm ${busy ? "opacity-50 cursor-not-allowed" : "hover:bg-red-600"
+                  }`}
               >
                 {busy ? "Đang xử lý..." : "Xóa"}
               </button>
             </div>
           )}
         </div>
-      </div>
+      </article>
+
       {showModal && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
           <div
@@ -161,9 +156,8 @@ const PostCard: FC<Props> = ({
               <button
                 disabled={busy}
                 onClick={handleDelete}
-                className={`px-4 py-2 bg-red-500 text-white rounded ${
-                  busy ? "opacity-50 cursor-not-allowed" : "hover:bg-red-600"
-                }`}
+                className={`px-4 py-2 bg-red-500 text-white rounded ${busy ? "opacity-50 cursor-not-allowed" : "hover:bg-red-600"
+                  }`}
               >
                 {busy ? "Đang xóa..." : "Xóa"}
               </button>

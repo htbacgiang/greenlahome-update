@@ -1,6 +1,6 @@
 import { useState } from "react";
 import Image from "next/image";
-import DefaultLayout from "../../components/layout/DefaultLayout";
+import DefaultLayout2 from "../../components/layout/DefaultLayout2";
 import {
   FaMapMarkerAlt,
   FaPhone,
@@ -187,7 +187,7 @@ export default function ContactPage({ meta }) {
   };
 
   return (
-    <DefaultLayout
+    <DefaultLayout2
       title={meta?.title}
       desc={meta?.description}
       thumbnail={meta?.og?.image}
@@ -254,7 +254,7 @@ export default function ContactPage({ meta }) {
 
               <div className="min-h-[420px] overflow-hidden rounded-3xl bg-white shadow-[0_18px_60px_rgba(15,23,42,0.08)]">
                 <iframe
-                  title="Bản đồ GreenLa Home"
+                  title="Bản đồ Greenlahome"
                   src="https://www.google.com/maps?q=20.9879366,105.7391281&z=17&output=embed"
                   width="100%"
                   height="100%"
@@ -277,10 +277,10 @@ export default function ContactPage({ meta }) {
                   Tư vấn miễn phí
                 </p>
                 <h2 className="mt-3 text-3xl font-bold text-gray-950 md:text-4xl">
-                  Gửi thông tin để GreenLa Home hỗ trợ bạn
+                  Gửi thông tin để Greenlahome hỗ trợ bạn
                 </h2>
                 <p className="mx-auto mt-4 max-w-2xl text-gray-600 md:text-lg">
-                  Chọn hình thức phù hợp, để lại thông tin dự án và đội ngũ GreenLa Home sẽ phản hồi trong vòng 24 giờ.
+                  Chọn hình thức phù hợp, để lại thông tin dự án và đội ngũ Greenlahome sẽ phản hồi trong vòng 24 giờ.
                 </p>
               </div>
 
@@ -395,7 +395,7 @@ export default function ContactPage({ meta }) {
                         <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                           <RadioCard
                             title="Tại văn phòng"
-                            description="Gặp mặt trực tiếp tại văn phòng GreenLa Home"
+                            description="Gặp mặt trực tiếp tại văn phòng Greenlahome"
                             name="consultationType"
                             value="office"
                             checked={formData.consultationType === "office"}
@@ -479,7 +479,7 @@ export default function ContactPage({ meta }) {
                   <StatusMessage
                     type="success"
                     title="Gửi thành công!"
-                    message="Cảm ơn bạn đã liên hệ với GreenLa Home. Chúng tôi sẽ phản hồi trong vòng 24 giờ."
+                    message="Cảm ơn bạn đã liên hệ với Greenlahome. Chúng tôi sẽ phản hồi trong vòng 24 giờ."
                   />
                 )}
 
@@ -495,7 +495,7 @@ export default function ContactPage({ meta }) {
           </div>
         </section>
       </div>
-    </DefaultLayout>
+    </DefaultLayout2>
   );
 }
 
@@ -599,31 +599,31 @@ function StatusMessage({ type, title, message }) {
 
 export async function getServerSideProps() {
   const meta = {
-    title: "Liên Hệ - GreenLa Home",
+    title: "Liên Hệ - Greenlahome",
     description:
-      "Liên hệ với GreenLa Home để được tư vấn thiết kế và thi công nội thất chung cư, nhà phố, nội thất gỗ công nghiệp. Hotline: 096.292.2332.",
+      "Liên hệ với Greenlahome để được tư vấn thiết kế và thi công nội thất chung cư, nhà phố, nội thất gỗ công nghiệp. Hotline: 096.292.2332.",
     keywords:
-      "liên hệ GreenLa Home, tư vấn thiết kế nội thất, thi công nội thất, nội thất chung cư, nội thất nhà phố",
-    author: "GreenLa Home",
+      "liên hệ Greenlahome, tư vấn thiết kế nội thất, thi công nội thất, nội thất chung cư, nội thất nhà phố",
+    author: "Greenlahome",
     robots: "index, follow",
     canonical: "https://greenlahome.vn/lien-he",
     og: {
-      title: "Liên Hệ - GreenLa Home",
+      title: "Liên Hệ - Greenlahome",
       description:
-        "Liên hệ với GreenLa Home để được tư vấn thiết kế và thi công nội thất trọn gói.",
+        "Liên hệ với Greenlahome để được tư vấn thiết kế và thi công nội thất trọn gói.",
       type: "website",
       image: "https://greenlahome.vn/images/noi-that-tan-truong-giang.jpg",
       imageWidth: "1200",
       imageHeight: "630",
       url: "https://greenlahome.vn/lien-he",
-      siteName: "GreenLa Home",
+      siteName: "Greenlahome",
       locale: "vi_VN",
     },
     twitter: {
       card: "summary_large_image",
-      title: "Liên Hệ - GreenLa Home",
+      title: "Liên Hệ - Greenlahome",
       description:
-        "Liên hệ với GreenLa Home để được tư vấn thiết kế và thi công nội thất cao cấp.",
+        "Liên hệ với Greenlahome để được tư vấn thiết kế và thi công nội thất cao cấp.",
       image: "https://greenlahome.vn/images/noi-that-tan-truong-giang.jpg",
       site: "@GreenLaHome",
     },

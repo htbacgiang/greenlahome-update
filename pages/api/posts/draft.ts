@@ -1,6 +1,5 @@
 import { NextApiHandler } from "next";
 import db from "../../../utils/db";
-
 import { getToken } from "next-auth/jwt";
 import Post from "../../../models/Post";
 import formidable from "formidable";
@@ -47,7 +46,6 @@ const saveDraft: NextApiHandler = async (req, res) => {
   }
 
   try {
-    // Xử lý FormData (cho việc upload file)
     const { files, fields } = await readFile<IncomingPost>(req);
     let tags: string[] = [];
     
@@ -66,74 +64,73 @@ const saveDraft: NextApiHandler = async (req, res) => {
     const isFeatured = parseBooleanField((fields as any).isFeatured);
     const isDirectPost = parseBooleanField((fields as any).isDirectPost);
 
-      await db.connectDb();
+    await db.connectDb();
 
-      // Xử lý FormData logic...
-      // Nếu có postId, cập nhật bài viết hiện có
-      if (postId) {
-        const existingPost = await Post.findById(postId);
-        if (!existingPost) {
-          return res.status(404).json({ error: "Không tìm thấy bài viết!" });
-        }
-
-        // Kiểm tra quyền sở hữu - Admin có thể chỉnh sửa mọi bài viết
-        const isAdmin = session.user.role === 'admin';
-        const isOwner = existingPost.author && existingPost.author.toString() === session.user.sub;
-        
-        if (!isAdmin && !isOwner) {
-          return res.status(403).json({ error: "Bạn không có quyền chỉnh sửa bài viết này!" });
-        }
-
-        // Cập nhật bài viết
-        existingPost.title = title || existingPost.title;
-        existingPost.content = content || existingPost.content;
-        existingPost.meta = meta || existingPost.meta;
-        existingPost.tags = tags;
-        existingPost.category = normalizedCategory || existingPost.category;
-        existingPost.isDraft = true;
-        existingPost.isFeatured = isFeatured;
-        existingPost.isDirectPost = isDirectPost;
-
-        // Nếu có thumbnail mới, upload lên Cloudinary
-        if (files.thumbnail) {
-          const thumbnail = files.thumbnail as formidable.File;
-          const { secure_url: url, public_id } = await cloudinary.uploader.upload(
-            thumbnail.filepath,
-            { folder: process.env.CLOUDINARY_FOLDER || "greenlahome" }
-          );
-          existingPost.thumbnail = { url, public_id };
-        }
-
-        await existingPost.save();
-        return res.json({ post: existingPost, message: "Đã lưu nháp thành công!" });
+    if (postId) {
+      const existingPost = await Post.findById(postId);
+      if (!existingPost) {
+        return res.status(404).json({ error: "Không tìm thấy bài viết!" });
       }
 
-      // Tạo bài viết nháp mới
-      const newDraft = new Post({
-        title: title || "Nháp bài viết",
-        content: content || "",
-        slug: slug || `draft-${Date.now()}`,
-        meta: meta || "(Nháp - chưa có mô tả)",
-        tags,
-        category: normalizedCategory,
-        author: session.user.sub,
-        isDraft: true,
-        isFeatured: isFeatured || false,
-        isDirectPost: isDirectPost || false,
-      });
+      const isAdmin = session.user.role === 'admin';
+      const isOwner = existingPost.author && existingPost.author.toString() === session.user.sub;
+      
+      if (!isAdmin && !isOwner) {
+        return res.status(403).json({ error: "Bạn không có quyền chỉnh sửa bài viết này!" });
+      }
 
-      // Nếu có thumbnail, upload lên Cloudinary
+      const authorVal = getFieldValue((fields as any).author);
+
+      existingPost.title = title || existingPost.title;
+      existingPost.content = content || existingPost.content;
+      existingPost.meta = meta || existingPost.meta;
+      existingPost.tags = tags;
+      existingPost.category = normalizedCategory || existingPost.category;
+      existingPost.isDraft = true;
+      existingPost.isFeatured = isFeatured;
+      existingPost.isDirectPost = isDirectPost;
+      if (authorVal) {
+        existingPost.author = authorVal;
+      }
+
       if (files.thumbnail) {
         const thumbnail = files.thumbnail as formidable.File;
         const { secure_url: url, public_id } = await cloudinary.uploader.upload(
           thumbnail.filepath,
           { folder: process.env.CLOUDINARY_FOLDER || "greenlahome" }
         );
-        newDraft.thumbnail = { url, public_id };
+        existingPost.thumbnail = { url, public_id };
       }
 
-      await newDraft.save();
-      res.json({ post: newDraft, message: "Đã tạo nháp mới!" });
+      await existingPost.save();
+      return res.json({ post: existingPost, message: "Đã lưu nháp thành công!" });
+    }
+
+    const authorVal = getFieldValue((fields as any).author);
+    const newDraft = new Post({
+      title: title || "Nháp bài viết",
+      content: content || "",
+      slug: slug || `draft-${Date.now()}`,
+      meta: meta || "(Nháp - chưa có mô tả)",
+      tags,
+      category: normalizedCategory,
+      author: authorVal || session.user.sub,
+      isDraft: true,
+      isFeatured: isFeatured || false,
+      isDirectPost: isDirectPost || false,
+    });
+
+    if (files.thumbnail) {
+      const thumbnail = files.thumbnail as formidable.File;
+      const { secure_url: url, public_id } = await cloudinary.uploader.upload(
+        thumbnail.filepath,
+        { folder: process.env.CLOUDINARY_FOLDER || "greenlahome" }
+      );
+      newDraft.thumbnail = { url, public_id };
+    }
+
+    await newDraft.save();
+    res.json({ post: newDraft, message: "Đã tạo nháp mới!" });
   } catch (error: any) {
     console.error("Lỗi lưu nháp:", error);
     res.status(500).json({ error: "Lỗi máy chủ!" });
@@ -159,7 +156,6 @@ const updateDraftStatus: NextApiHandler = async (req, res) => {
       return res.status(404).json({ error: "Không tìm thấy bài viết!" });
     }
 
-    // Kiểm tra quyền sở hữu - Admin có thể chỉnh sửa mọi bài viết
     const isAdmin = session.user.role === 'admin';
     const isOwner = post.author && post.author.toString() === session.user.sub;
     
@@ -176,8 +172,6 @@ const updateDraftStatus: NextApiHandler = async (req, res) => {
     res.status(500).json({ error: "Lỗi máy chủ!" });
   }
 };
-
-
 
 const getDrafts: NextApiHandler = async (req, res) => {
   const token = await getToken({ req, secret: process.env.JWT_SECRET });
@@ -202,7 +196,6 @@ const getDrafts: NextApiHandler = async (req, res) => {
   }
 };
 
-// Helper function để đọc file từ formidable
 const readFile = async <T>(req: any): Promise<{ fields: T; files: any }> => {
   return new Promise((resolve, reject) => {
     const form = formidable();
@@ -213,7 +206,6 @@ const readFile = async <T>(req: any): Promise<{ fields: T; files: any }> => {
   });
 };
 
-// Helper function để parse JSON body
 const parseJsonBody = async (req: any): Promise<any> => {
   return new Promise((resolve, reject) => {
     let data = '';

@@ -134,6 +134,7 @@ const updatePost: NextApiHandler = async (req, res) => {
     }
 
     const { title, content, meta, slug, category } = body;
+    const author = (body as any).author;
     const isDraft = parseOptionalBooleanField((body as any).isDraft);
     const isFeatured = parseBooleanField((body as any).isFeatured);
     const isDirectPost = parseBooleanField((body as any).isDirectPost);
@@ -149,13 +150,17 @@ const updatePost: NextApiHandler = async (req, res) => {
     post.meta = meta;
     post.slug = uniqueSlug;
     post.category = category;
+    
+    const authorVal = getFieldValue(author);
+    if (authorVal) {
+      post.author = authorVal as any;
+    }
 
     if (typeof isDraft === 'boolean') {
       post.isDraft = isDraft;
     }
 
     post.isFeatured = isFeatured;
-
     post.isDirectPost = isDirectPost;
 
     // Cập nhật thumbnail

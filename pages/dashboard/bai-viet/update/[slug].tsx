@@ -62,7 +62,7 @@ export const getServerSideProps: GetServerSideProps<
     const post = await Post.findOne({ slug });
     if (!post) return { notFound: true };
 
-    const { _id, meta, title, content, thumbnail, tags, category, isDraft, isFeatured, isDirectPost } = post;
+    const { _id, meta, title, content, thumbnail, tags, category, isDraft, isFeatured, isDirectPost, author } = post;
 
     return {
       props: {
@@ -79,6 +79,7 @@ export const getServerSideProps: GetServerSideProps<
           isDraft: isDraft ?? true,
           isFeatured: isFeatured ?? false,
           isDirectPost: isDirectPost ?? false,
+          author: author ? author.toString() : "",
         },
       },
     };

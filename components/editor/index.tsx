@@ -35,6 +35,7 @@ export interface FinalPost extends SeoResult {
   isDraft?: boolean;
   isFeatured?: boolean; // Bài viết nổi bật
   isDirectPost?: boolean; // Bài viết hiển thị ở URL 2 cấp (trangchu/slug)
+  author?: string;
 }
 
 interface Props {
@@ -62,6 +63,7 @@ const Editor: FC<Props> = ({
   const [images, setImages] = useState<{ src: string; altText?: string; id?: string }[]>([]);
   const [loadingImages, setLoadingImages] = useState(true); // Loading state cho images
   const [seoInitialValue, setSeoInitialValue] = useState<SeoResult>();
+  const [authors, setAuthors] = useState<{ _id: string; name: string }[]>([]);
   const [post, setPost] = useState<FinalPost>({
     title: "",
     content: "",
@@ -78,11 +80,15 @@ const Editor: FC<Props> = ({
   // Button featured bị disable khi đủ 4 bài VÀ bài hiện tại chưa phải featured
   const featuredDisabled = featuredCount >= 4 && !isFeatured;
 
-  // Fetch số bài nổi bật hiện tại
+  // Fetch số bài nổi bật hiện tại và danh sách tác giả
   useEffect(() => {
     axios.get("/api/posts/featured")
       .then(({ data }) => setFeaturedCount(data.count ?? 0))
       .catch(() => { });
+
+    axios.get("/api/authors")
+      .then(({ data }) => setAuthors(data.authors || []))
+      .catch((err) => console.error("Error fetching authors:", err));
   }, []);
 
   const fetchImages = useCallback(async (retryCount = 0) => {
@@ -571,6 +577,24 @@ const Editor: FC<Props> = ({
                   onChange={updateTitle}
                   value={post.title}
                 />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Tác giả bài viết
+                </label>
+                <select
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#105d97] focus:border-transparent outline-none bg-white text-gray-800"
+                  value={post.author || ""}
+                  onChange={({ target }) => setPost(prev => ({ ...prev, author: target.value }))}
+                >
+                  <option value="">Chọn tác giả...</option>
+                  {authors.map((author) => (
+                    <option key={author._id} value={author._id}>
+                      {author.name}
+                    </option>
+                  ))}
+                </select>
               </div>
             </div>
 

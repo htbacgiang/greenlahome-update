@@ -1,6 +1,7 @@
 import Head from "next/head";
 import DefaultLayout from "../../components/layout/DefaultLayout";
 import ProjectDetailPage from "../../components/greenlahome/ProjectDetailPage";
+import { normalizeSiteImageUrl } from "../../utils/imageUrls";
 
 export default function ProjectDetail({ meta, project, jsonLd }) {
   return (
@@ -22,33 +23,20 @@ export default function ProjectDetail({ meta, project, jsonLd }) {
   );
 }
 
-// Helper function to normalize image URL
-const normalizeImageUrl = (imageUrl, baseUrl) => {
-  if (!imageUrl) return `${baseUrl}/greenlahomelogo.png`;
-  
-  // Check if URL is already absolute (starts with http:// or https://)
-  if (imageUrl && (imageUrl.startsWith('http://') || imageUrl.startsWith('https://'))) {
-    return imageUrl;
-  }
-  
-  // If relative path, prepend baseUrl
-  return `${baseUrl}${imageUrl.startsWith('/') ? imageUrl : `/${imageUrl}`}`;
-};
-
 // Helper functions
 const createMeta = (project, baseUrl, slug) => {
   const imageUrl = project.mainImage || project.image;
-  const normalizedImage = normalizeImageUrl(imageUrl, baseUrl);
+  const normalizedImage = normalizeSiteImageUrl(imageUrl, baseUrl, "/greenlahomelogo.png");
   
   return {
-    title: `${project.title} - Greenla Home`,
-    description: project.description || `Chi tiết dự án ${project.title} của Greenla Home`,
-    keywords: `${project.title}, ${project.tags?.join(', ') || ''}, thiết kế kiến trúc, Greenla Home`,
+    title: `${project.title} - Greenlahome`,
+    description: project.description || `Chi tiết dự án ${project.title} của Greenlahome`,
+    keywords: `${project.title}, ${project.tags?.join(', ') || ''}, thiết kế kiến trúc, Greenlahome`,
     robots: "index, follow",
-    author: "Greenla Home",
+    author: "Greenlahome",
     canonical: `${baseUrl}/du-an/${slug}`,
     og: {
-      title: `${project.title} - Greenla Home`,
+      title: `${project.title} - Greenlahome`,
       description: project.description || `Chi tiết dự án ${project.title}`,
       type: "article",
       image: normalizedImage,
@@ -58,7 +46,7 @@ const createMeta = (project, baseUrl, slug) => {
     },
     twitter: {
       card: "summary_large_image",
-      title: `${project.title} - Greenla Home`,
+      title: `${project.title} - Greenlahome`,
       description: project.description || `Chi tiết dự án ${project.title}`,
       image: normalizedImage,
     },
@@ -67,7 +55,7 @@ const createMeta = (project, baseUrl, slug) => {
 
 const createJsonLd = (project, baseUrl, slug) => {
   const imageUrl = project.mainImage || project.image;
-  const normalizedImage = normalizeImageUrl(imageUrl, baseUrl);
+  const normalizedImage = normalizeSiteImageUrl(imageUrl, baseUrl, "/greenlahomelogo.png");
   
   return {
     "@context": "https://schema.org",
@@ -78,11 +66,11 @@ const createJsonLd = (project, baseUrl, slug) => {
     "image": normalizedImage,
     "creator": {
       "@type": "Organization",
-      "name": "Greenla Home",
+      "name": "Greenlahome",
       "url": baseUrl,
     },
     "datePublished": project.year || "2024",
-    "keywords": project.tags?.join(', ') || "thiết kế kiến trúc, Greenla Home",
+    "keywords": project.tags?.join(', ') || "thiết kế kiến trúc, Greenlahome",
     "inLanguage": "vi-VN",
   };
 };

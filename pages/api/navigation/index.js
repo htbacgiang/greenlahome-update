@@ -1,7 +1,7 @@
 import { mongooseConnect } from "../../../lib/mongoose";
 import NavigationMenu from "../../../models/NavigationMenu";
 
-// Default navigation structure for GreenLa Home
+// Default navigation structure for Greenlahome
 const DEFAULT_MENU = [
   { name: "Trang chủ", href: "/", order: 0, isActive: true, children: [] },
   { name: "Giới thiệu", href: "/gioi-thieu", order: 1, isActive: true, children: [] },

@@ -1,249 +1,179 @@
-import { useState, useEffect, useCallback, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
+import Link from "next/link";
+import { motion } from "framer-motion";
 import Image from "next/image";
-import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
+import { FaChevronRight } from "react-icons/fa";
 import ContactForm from "../header/ContactForm";
 
-export default function Banner({ onConsultClick }) {
-  // State to track the current slide
-  const [currentSlide, setCurrentSlide] = useState(0);
-  // State to control form visibility
+const HERO_IMAGE = "/images/view-luxurious-hotel-interior-space.jpg";
+
+export default function HeroSection() {
   const [isFormOpen, setIsFormOpen] = useState(false);
-  // State to pause auto-slide
-  const [isPaused, setIsPaused] = useState(false);
-  // Ref for modal focus trapping
   const modalRef = useRef(null);
 
-  // Array of slides
-  const slides = [
-    {
-      image: "/images/banner4.webp",
-      smallHeading: "GREENLAHOME",
-      heading: "Thiết Kế & Thi Công Nội Thất Chung Cư, Nhà Phố",
-      description:
-        "GreenLa Home chuyên thiết kế và thi công nội thất chung cư, nhà phố, biệt thự với giải pháp hiện đại, tối ưu không gian sống và chi phí.",
-    },
-    {
-      image: "/images/banner5.webp",
-      smallHeading: "GREENLAHOME",
-      heading: "Giải pháp thiết kế toàn diện cho căn hộ hiện đại.",
-      description:
-        "Chúng tôi mang đến thiết kế và thi công nội thất chuyên nghiệp, phù hợp với mọi căn hộ hiện đại.",
-    },
-    {
-      image: "/images/banner6.webp",
-      smallHeading: "GREENLAHOME",
-      heading: "Nội thất hiện đại, chất lượng bền vững",
-      description:
-        "Chúng tôi cung cấp dịch vụ thiết kế và thi công nội thất hiện đại, đảm bảo chất lượng và phong cách sống lâu dài.",
-    },
-  ];
+  const toggleForm = () => setIsFormOpen((prev) => !prev);
 
-  // Auto-run functionality
-  useEffect(() => {
-    if (isPaused || isFormOpen) return;
-    const interval = setInterval(() => {
-      setCurrentSlide((prevSlide) =>
-        prevSlide === slides.length - 1 ? 0 : prevSlide + 1
-      );
-    }, 5000);
-
-    return () => clearInterval(interval);
-  }, [slides.length, isPaused, isFormOpen]);
-
-  // Memoized navigation functions
-  const goToPreviousSlide = useCallback(() => {
-    setCurrentSlide((prevSlide) =>
-      prevSlide === 0 ? slides.length - 1 : prevSlide - 1
-    );
-  }, [slides.length]);
-
-  const goToNextSlide = useCallback(() => {
-    setCurrentSlide((prevSlide) =>
-      prevSlide === slides.length - 1 ? 0 : prevSlide + 1
-    );
-  }, [slides.length]);
-
-  const goToSlide = useCallback((index) => {
-    setCurrentSlide(index);
-  }, []);
-
-  // Toggle form visibility
-  const toggleForm = useCallback(() => {
-    setIsFormOpen((prev) => !prev);
-  }, []);
-
-  const handleConsultClick = useCallback(() => {
-    if (onConsultClick) {
-      onConsultClick();
-      return;
-    }
-
-    toggleForm();
-  }, [onConsultClick, toggleForm]);
-
-  // Keyboard navigation for slides
-  useEffect(() => {
-    const handleKeyDown = (e) => {
-      if (isFormOpen) return; // Disable slide navigation when form is open
-      if (e.key === "ArrowLeft") goToPreviousSlide();
-      if (e.key === "ArrowRight") goToNextSlide();
-    };
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [goToPreviousSlide, goToNextSlide, isFormOpen]);
-
-  // Close form with Escape key and focus trapping
   useEffect(() => {
     if (!isFormOpen) return;
-
-    const handleKeyDown = (e) => {
-      if (e.key === "Escape") toggleForm();
-    };
-
-    // Focus trapping
     const modal = modalRef.current;
-    const focusableElements = modal.querySelectorAll(
-      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
-    );
-    const firstElement = focusableElements[0];
-    const lastElement = focusableElements[focusableElements.length - 1];
+    const focusables = modal?.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
+    const first = focusables?.[0];
+    const last = focusables?.[focusables.length - 1];
 
-    const handleTab = (e) => {
-      if (e.key === "Tab") {
-        if (e.shiftKey && document.activeElement === firstElement) {
-          e.preventDefault();
-          lastElement.focus();
-        } else if (!e.shiftKey && document.activeElement === lastElement) {
-          e.preventDefault();
-          firstElement.focus();
-        }
-      }
+    const onEscape = (e) => e.key === "Escape" && toggleForm();
+    const onTab = (e) => {
+      if (e.key !== "Tab") return;
+      if (e.shiftKey && document.activeElement === first) e.preventDefault(), last?.focus();
+      else if (!e.shiftKey && document.activeElement === last) e.preventDefault(), first?.focus();
     };
 
-    firstElement?.focus();
-    modal.addEventListener("keydown", handleTab);
-    window.addEventListener("keydown", handleKeyDown);
-
+    first?.focus();
+    window.addEventListener("keydown", onEscape);
+    modal?.addEventListener("keydown", onTab);
     return () => {
-      modal.removeEventListener("keydown", handleTab);
-      window.removeEventListener("keydown", handleKeyDown);
+      window.removeEventListener("keydown", onEscape);
+      modal?.removeEventListener("keydown", onTab);
     };
-  }, [isFormOpen, toggleForm]);
+  }, [isFormOpen]);
+
+  useEffect(() => {
+    const html = document.documentElement;
+    if (isFormOpen) {
+      html.style.overflow = "hidden";
+      html.style.overscrollBehavior = "contain";
+      document.body.style.overflow = "hidden";
+      document.body.style.overscrollBehavior = "contain";
+      document.body.style.touchAction = "none";
+    } else {
+      html.style.overflow = "";
+      html.style.overscrollBehavior = "";
+      document.body.style.overflow = "";
+      document.body.style.overscrollBehavior = "";
+      document.body.style.touchAction = "";
+    }
+    return () => {
+      html.style.overflow = "";
+      html.style.overscrollBehavior = "";
+      document.body.style.overflow = "";
+      document.body.style.overscrollBehavior = "";
+      document.body.style.touchAction = "";
+    };
+  }, [isFormOpen]);
 
   return (
-    <section
-      className="relative h-screen"
-      onMouseEnter={() => setIsPaused(true)}
-      onMouseLeave={() => setIsPaused(false)}
-    >
-      {/* Background Image */}
-      <div className="absolute inset-0">
-        <Image
-          src={slides[currentSlide].image}
-          alt={`Slide ${currentSlide + 1}: ${slides[currentSlide].smallHeading}`}
-          layout="fill"
-          quality={100}
-          objectFit="cover"
-          className="brightness-90 transition-opacity duration-1000"
-          priority={currentSlide === 0} // Preload first slide
-          onError={(e) => (e.target.src = "/images/fallback.png")} // Fallback image
-        />
-        <div className="absolute inset-0 bg-black bg-opacity-40"></div>
-      </div>
+    <>
+      <style jsx>{`
+        .hero-headline-judson {
+          font-family: var(--font-judson), 'Judson', serif !important;
+        }
+        .hero-headline-with-underline {
+          position: relative;
+          display: inline-block;
+          color: #EAD5B0;
+        }
+        .hero-underline-svg {
+          display: block;
+          width: 100%;
+          height: 0.4em;
+          margin-top: -0.2em;
+          margin-bottom: 0.2em;
+        }
+        .hero-underline-svg path {
+          fill: none;
+          stroke: #EAD5B0;
+          stroke-width: 8;
+          stroke-linecap: round;
+          stroke-dasharray: 500;
+          stroke-dashoffset: 500;
+          animation: hero-draw-line 1.2s ease-out 0.3s forwards;
+        }
+        @keyframes hero-draw-line {
+          to {
+            stroke-dashoffset: 0;
+          }
+        }
+      `}</style>
 
-      {/* Content */}
-      <div className="relative z-10 flex flex-col items-center justify-center h-full text-center text-white">
-        <p className="text-green-500 text-3xl font-bold uppercase tracking-widest mb-2">
-          {slides[currentSlide].smallHeading}
-        </p>
-        <h1 className="text-2xl md:text-4xl font-bold mb-4">
-          {slides[currentSlide].heading}
-        </h1>
-        <p className="text-gray-300 text-sm md:text-lg max-w-5xl mx-auto mb-6">
-          {slides[currentSlide].description}
-        </p>
-        <button
-          className="flex items-center bg-green-600 text-white px-6 py-3 rounded-full hover:bg-orange-600 transition-colors focus:outline-none focus:ring-2 focus:ring-orange-400"
-          onClick={handleConsultClick}
-          aria-label="Open registration form"
-        >
-          Tìm hiểu ngay
-          <FaArrowRight className="ml-2" />
-        </button>
-      </div>
-
-      {/* Navigation Arrows */}
-      <div className="absolute inset-y-0 left-4 flex items-center z-10">
-        <button
-          onClick={goToPreviousSlide}
-          aria-label="Previous slide"
-          className="focus:outline-none"
-        >
-          <FaArrowLeft className="text-white text-2xl cursor-pointer hover:text-orange-500" />
-        </button>
-      </div>
-      <div className="absolute inset-y-0 right-4 flex items-center z-10">
-        <button
-          onClick={goToNextSlide}
-          aria-label="Next slide"
-          className="focus:outline-none"
-        >
-          <FaArrowRight className="text-white text-2xl cursor-pointer hover:text-orange-500" />
-        </button>
-      </div>
-
-      {/* Slide Indicators (Dots) */}
-      <div className="absolute bottom-8 left-0 right-0 flex justify-center space-x-2 z-10">
-        {slides.map((_, index) => (
-          <button
-            key={index}
-            className={`w-3 h-3 rounded-full ${
-              currentSlide === index ? "bg-orange-500" : "bg-gray-400"
-            }`}
-            onClick={() => goToSlide(index)}
-            aria-label={`Go to slide ${index + 1}`}
+      <section
+        className="relative z-0 w-full overflow-hidden "
+        style={{ height: "100vh", maxHeight: "100vh" }}
+      >
+        <div className="absolute inset-0">
+          <Image
+            src={HERO_IMAGE}
+            alt="Hero background"
+            fill
+            priority
+            className="absolute inset-0 w-full h-full object-cover"
+            sizes="100vw"
           />
-        ))}
-      </div>
+          <div className="absolute inset-0 bg-black/70 z-10" aria-hidden />
+        </div>
 
-      {/* Registration Form Modal */}
-      {!onConsultClick && isFormOpen && (
+        <div className="relative z-20 flex flex-col items-center justify-center h-full text-center text-white px-4">
+          <h2 className="hero-headline-judson text-3xl sm:text-4xl md:text-4xl  font-bold leading-tight max-w-6xl mb-2 text-white">
+            <span className="hero-headline-with-underline">
+              GREENLAHOME
+
+            </span>{" "}
+            : MODERN LIVING - SMART DESIGN
+
+          </h2>
+          <p className="text-white/90 text-base sm:text-lg md:text-2xl max-w-3xl mb-10 leading-relaxed">
+            Kiến tạo không gian sống tiện nghi, tinh tế và đậm dấu ấn cá nhân.
+          </p>
+          <motion.div
+            className="flex flex-col sm:flex-row gap-4"
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 2, ease: [0.22, 1.5, 0.36, 1.5] }}
+          >
+            <Link
+              href="/du-an"
+              className="inline-flex items-center justify-center px-8 py-4  font-semibold uppercase tracking-wide text-sm text-white bg-[#c4a77d] hover:bg-[#b8956a] hover:-translate-y-px transition-all focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-transparent"
+            >
+              Dự án của chúng tôi
+            </Link>
+            <button
+              onClick={toggleForm}
+              className="inline-flex items-center justify-center px-8 py-4 font-semibold uppercase tracking-wide text-sm text-white border-2 border-white/80 bg-transparent hover:bg-white/10 hover:border-white hover:-translate-y-px transition-all focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-transparent"
+            >
+              Nhận tư vấn
+              <FaChevronRight className="ml-2 w-4 h-4" aria-hidden />
+            </button>
+          </motion.div>
+        </div>
+      </section>
+
+      {isFormOpen && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50"
-          onClick={(e) => {
-            if (e.target === e.currentTarget) toggleForm();
-          }}
+          className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/60 p-4"
+          onClick={(e) => e.target === e.currentTarget && toggleForm()}
+          role="dialog"
+          aria-modal="true"
         >
           <div
             ref={modalRef}
-            className="rounded-lg w-full max-w-md sm:max-w-lg md:max-w-2xl lg:max-w-5xl relative bg-white"
+            className="relative w-full max-w-5xl max-h-[90vh] overflow-y-auto bg-white rounded-3xl shadow-xl"
           >
-            {/* Close Button */}
-            <button
-              className="absolute top-2 right-2 text-gray-600 hover:text-gray-800"
-              onClick={toggleForm}
-              aria-label="Close form"
-            >
-              <svg
-                className="w-6 h-6"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-                xmlns="http://www.w3.org/2000/svg"
+            <div className="sticky top-0 z-50 flex justify-end p-2 bg-white/95 backdrop-blur border-b">
+              <button
+                type="button"
+                className="inline-flex items-center gap-2 px-2 py-2 rounded-full bg-gray-200 text-gray-700 hover:bg-red-500 text-white focus:outline-none"
+                onClick={toggleForm}
+                aria-label="Đóng popup"
               >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M6 18L18 6M6 6l12 12"
-                />
-              </svg>
-            </button>
-            {/* Registration Form */}
-            <ContactForm />
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+            <div className="p-4 md:p-6">
+              <ContactForm />
+            </div>
           </div>
         </div>
       )}
-    </section>
+    </>
   );
 }

@@ -73,7 +73,7 @@ const ResponsiveMenu = ({ isOpen, toggleMenu }) => {
           {menuItems.map((item, index) => (
             <li key={index}>
               {!item.dropdown ? (
-                <Link href={item.link} className="text-lg font-medium hover:text-green-600">
+                <Link href={item.link} className="text-lg font-medium hover:text-[#C4A882]">
                   {item.name}
                 </Link>
               ) : (
@@ -84,7 +84,7 @@ const ResponsiveMenu = ({ isOpen, toggleMenu }) => {
                     role="button"
                     aria-expanded={activeDropdown === index}
                   >
-                    <span className="text-lg font-medium hover:text-green-600">
+                    <span className="text-lg font-medium hover:text-[#C4A882]">
                       {item.name}
                     </span>
                     <span className="text-lg">
@@ -104,7 +104,7 @@ const ResponsiveMenu = ({ isOpen, toggleMenu }) => {
                       <li key={subIndex}>
                         <Link
                           href={subItem.link}
-                          className="block py-1 text-gray-700 hover:text-green-600"
+                          className="block py-1 text-gray-700 hover:text-[#C4A882]"
                         >
                           {subItem.name}
                         </Link>

@@ -124,7 +124,7 @@ const Blogs: NextPage<Props> = ({ posts, meta }) => {
               </p>
             </nav>
             <h1 className="text-3xl md:text-4xl font-bold text-white mt-2">
-              Góc Chuyên Gia - GreenLa Home
+              Góc Chuyên Gia - Greenlahome
             </h1>
             <p className="text-lg md:text-xl text-white mt-2">
               Chia sẻ kiến thức chuyên sâu về thiết kế, phong thủy và nội thất.

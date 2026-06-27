@@ -29,8 +29,8 @@ const MainCategories: FC<Props> = ({ onCategorySelect }) => {
               onClick={() => handleCategoryClick(category.key)}
               className={`px-3 md:px-5 py-3 rounded-full font-medium transition-all duration-300 border
               ${activeCategory === category.key
-                  ? "bg-green-700 text-white border-green-700 hover:bg-transparent hover:text-green-700"
-                  : "bg-transparent text-gray-600 border-gray-200 hover:bg-transparent hover:text-green-700 hover:border-green-700"
+                  ? "bg-[#A0845A] text-white border-green-700 hover:bg-transparent hover:text-[#A0845A]"
+                  : "bg-transparent text-gray-600 border-gray-200 hover:bg-transparent hover:text-[#A0845A] hover:border-green-700"
                 }`}
             >
               {category.label}

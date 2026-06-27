@@ -488,7 +488,7 @@ export default function ThietKeNoiThatChungCuPage() {
 
           <h3 className="text-red-700">Liên hệ tư vấn miễn phí: 0962.922.332</h3>
           <p className="text-xl"><strong>Công ty TNHH TMDV & SX Tân Trường Giang</strong></p>
-          <p className="text-green-600"><em>Greenlahome Interior Design</em></p>
+          <p className="text-[#C4A882]"><em>Greenlahome Interior Design</em></p>
           <ul>
             <li><strong>Địa chỉ:</strong> Số 10 – Khu C5 – KĐT Geleximco – Lê Trọng Tấn - Hà Đông - Hà Nội.</li>
             <li>

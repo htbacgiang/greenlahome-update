@@ -64,15 +64,15 @@ export default function ConsultationForm() {
   };
 
   return (
-    <section className="py-12 bg-gray-900">
+    <section className="py-12 bg-white">
       <div className="container mx-auto px-4">
-        <h2 className="text-3xl md:text-4xl font-bold text-white text-center mb-8">
+        <h2 className="text-3xl md:text-4xl font-bold text-gray-900 text-center mb-8">
           ĐĂNG KÝ TƯ VẤN THIẾT KẾ THI CÔNG NỘI THẤT
         </h2>
 
         <form onSubmit={handleSubmit} className="max-w-4xl mx-auto space-y-6">
           <div>
-            <label className="block text-white text-sm mb-2">
+            <label className="block text-gray-800 text-sm mb-2">
               Họ và tên <span className="text-red-500">*</span>
             </label>
             <input
@@ -81,8 +81,8 @@ export default function ConsultationForm() {
               value={formData.name}
               onChange={handleChange}
               placeholder="Họ và tên *"
-              className={`w-full p-3 bg-gray-800 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 ${
-                errors.name ? "border border-red-500" : "border border-gray-700"
+              className={`w-full p-3 bg-white text-gray-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#deb46d] ${
+                errors.name ? "border border-red-500" : "border border-gray-300"
               }`}
             />
             {errors.name && <p className="text-red-500 text-sm mt-1">{errors.name}</p>}
@@ -91,7 +91,7 @@ export default function ConsultationForm() {
           {/* Phone và Email trên cùng 1 dòng ở desktop, tách 2 dòng ở mobile */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <label className="block text-white text-sm mb-2">
+              <label className="block text-gray-800 text-sm mb-2">
                 Số điện thoại <span className="text-red-500">*</span>
               </label>
               <input
@@ -100,15 +100,15 @@ export default function ConsultationForm() {
                 value={formData.phone}
                 onChange={handleChange}
                 placeholder="Số điện thoại *"
-                className={`w-full p-3 bg-gray-800 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 ${
-                  errors.phone ? "border border-red-500" : "border border-gray-700"
+                className={`w-full p-3 bg-white text-gray-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#deb46d] ${
+                  errors.phone ? "border border-red-500" : "border border-gray-300"
                 }`}
               />
               {errors.phone && <p className="text-red-500 text-sm mt-1">{errors.phone}</p>}
             </div>
 
             <div>
-              <label className="block text-white text-sm mb-2">
+              <label className="block text-gray-800 text-sm mb-2">
                 Email
               </label>
               <input
@@ -117,8 +117,8 @@ export default function ConsultationForm() {
                 value={formData.email}
                 onChange={handleChange}
                 placeholder="Email (không bắt buộc)"
-                className={`w-full p-3 bg-gray-800 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 ${
-                  errors.email ? "border border-red-500" : "border border-gray-700"
+                className={`w-full p-3 bg-white text-gray-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#deb46d] ${
+                  errors.email ? "border border-red-500" : "border border-gray-300"
                 }`}
               />
               {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email}</p>}
@@ -126,7 +126,7 @@ export default function ConsultationForm() {
           </div>
 
           <div>
-            <label className="block text-white text-sm mb-2">
+            <label className="block text-gray-800 text-sm mb-2">
               Nội dung
             </label>
             <textarea
@@ -135,14 +135,14 @@ export default function ConsultationForm() {
               onChange={handleChange}
               placeholder="Nội dung (không bắt buộc)"
               rows="6"
-              className="w-full p-3 bg-gray-800 text-white border border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
+              className="w-full p-3 bg-white text-gray-900 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#deb46d]"
             />
           </div>
 
           {status && (
             <p
               className={`text-center ${
-                status.includes("thành công") ? "text-green-600" : "text-red-600"
+                status.includes("thành công") ? "text-[#deb46d]" : "text-red-600"
               }`}
             >
               {status}
@@ -153,7 +153,7 @@ export default function ConsultationForm() {
             <button
               type="submit"
               disabled={status === "Đang gửi..."}
-              className="px-6 py-3 bg-orange-500 text-white font-semibold rounded-lg hover:bg-orange-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              className="px-6 py-3 bg-[#deb46d] text-gray-950 font-semibold rounded-lg hover:bg-[#c99f58] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
               GỬI THÔNG TIN
             </button>

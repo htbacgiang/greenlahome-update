@@ -1,6 +1,16 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
+  async rewrites() {
+    const cloudName = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME || "dcgtt1jza";
+
+    return [
+      {
+        source: "/images/:path*",
+        destination: `https://res.cloudinary.com/${cloudName}/image/upload/:path*`,
+      },
+    ];
+  },
   async headers() {
     return [
       {

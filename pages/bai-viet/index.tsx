@@ -7,7 +7,7 @@ import { FaCalendarAlt, FaUser, FaArrowRight, FaClock, FaTag } from "react-icons
 import { trimText } from "../../utils/helper";
 import { readPostsFromDb, formatPosts } from "../../lib/utils";
 
-import DefaultLayout from "../../components/layout/DefaultLayout";
+import DefaultLayout2 from "../../components/layout/DefaultLayout2";
 import MainCategories from "../../components/common/MainCategories";
 import { normalizePostCategory } from "../../utils/postCategories";
 
@@ -168,7 +168,7 @@ const Blogs: NextPage<Props> = ({ initialPosts = [] }) => {
         <meta name="twitter:image" content={meta.twitter.image} />
       </Head>
 
-      <DefaultLayout>
+      <DefaultLayout2>
         <div className="h-[80px]"></div>
         <div className="pb-12 mt-6 container mx-auto px-4">
           <div className="flex flex-col gap-4 justify-center w-full">
@@ -446,7 +446,7 @@ const Blogs: NextPage<Props> = ({ initialPosts = [] }) => {
             </>
           </div>
         </div>
-      </DefaultLayout>
+      </DefaultLayout2>
     </>
   );
 };

@@ -44,6 +44,7 @@ const NAV_GROUPS = [
       { title: "Dự án", icon: FolderPlus, href: "/dashboard/du-an" },
       { title: "Bài viết", icon: Notebook, href: "/dashboard/bai-viet" },
       { title: "Thêm bài viết", icon: SquarePen, href: "/dashboard/them-bai-viet" },
+      { title: "Quản lý tác giả", icon: Users2, href: "/dashboard/tac-gia" },
       { title: "Thùng rác", icon: Trash2, href: "/dashboard/bai-viet/trash" },
     ],
   },

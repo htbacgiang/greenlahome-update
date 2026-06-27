@@ -88,17 +88,17 @@ export default function ThietKeNoiThatChungCu({ relatedPosts, meta }) {
   // Định nghĩa safeMeta
   const defaultMeta = {
     title:
-      "Thiết Kế Nội Thất Chung Cư Đẹp Hiện Đại | Tối Ưu Không Gian | GreenLa Home",
+      "Thiết Kế Nội Thất Chung Cư Đẹp Hiện Đại | Tối Ưu Không Gian | Greenlahome",
     description:
       "Hướng dẫn thiết kế nội thất chung cư đẹp, hiện đại: Bí quyết tối ưu không gian sống 30-120m² theo xu hướng 2025. Khám phá đa dạng phong cách & gợi ý bố trí chi tiết các phòng (khách, bếp, ngủ, ban công...) cùng yếu tố phong thủy.",
     keywords:
-      "thiết kế nội thất chung cư, nội thất chung cư, thiết kế nội thất, GreenLa Home, nội thất hiện đại, tối ưu không gian",
+      "thiết kế nội thất chung cư, nội thất chung cư, thiết kế nội thất, Greenlahome, nội thất hiện đại, tối ưu không gian",
     robots: "index, follow",
-    author: "GreenLa Home",
+    author: "Greenlahome",
     canonical: "https://greenlahome.vn/thiet-ke-noi-that-chung-cu",
     og: {
       title:
-        "Thiết Kế Nội Thất Chung Cư Đẹp Hiện Đại | Tối Ưu Không Gian | GreenLa Home",
+        "Thiết Kế Nội Thất Chung Cư Đẹp Hiện Đại | Tối Ưu Không Gian | Greenlahome",
       description:
         "Hướng dẫn thiết kế nội thất chung cư đẹp, hiện đại: Bí quyết tối ưu không gian sống 30-120m² theo xu hướng 2025. Khám phá đa dạng phong cách & gợi ý bố trí chi tiết các phòng (khách, bếp, ngủ, ban công...) cùng yếu tố phong thủy.",
       type: "website",
@@ -106,13 +106,13 @@ export default function ThietKeNoiThatChungCu({ relatedPosts, meta }) {
       imageWidth: "1200",
       imageHeight: "630",
       url: "https://greenlahome.vn/thiet-ke-noi-that-chung-cu",
-      siteName: "GreenLa Home",
+      siteName: "Greenlahome",
       locale: "vi_VN",
     },
     twitter: {
       card: "summary_large_image",
       title:
-        "Thiết Kế Nội Thất Chung Cư Đẹp Hiện Đại | Tối Ưu Không Gian | GreenLa Home",
+        "Thiết Kế Nội Thất Chung Cư Đẹp Hiện Đại | Tối Ưu Không Gian | Greenlahome",
       description:
         "Hướng dẫn thiết kế nội thất chung cư đẹp, hiện đại: Bí quyết tối ưu không gian sống 30-120m² theo xu hướng 2025. Khám phá đa dạng phong cách & gợi ý bố trí chi tiết các phòng (khách, bếp, ngủ, ban công...) cùng yếu tố phong thủy.",
       image: "https://greenlahome.vn/images/noi-that-tan-truong-giang.jpg",
@@ -149,11 +149,11 @@ export default function ThietKeNoiThatChungCu({ relatedPosts, meta }) {
     serviceType: "Thiết kế nội thất chung cư",
     provider: {
       "@type": "Organization",
-      name: "GreenLa Home",
+      name: "Greenlahome",
       url: "https://greenlahome.vn",
       logo: "https://greenlahome.vn/greenlahomelogo.png",
       description:
-        "GreenLa Home chuyên thiết kế và thi công nội thất chung cư, nhà phố, nội thất chọn gói gỗ công nghiệp chất lượng cao, tối ưu chi phí và thẩm mỹ.",
+        "Greenlahome chuyên thiết kế và thi công nội thất chung cư, nhà phố, nội thất chọn gói gỗ công nghiệp chất lượng cao, tối ưu chi phí và thẩm mỹ.",
       address: {
         "@type": "PostalAddress",
         streetAddress: "Số 10 lô C5, KDT Geleximco Lê Trọng Tấn, Hà Đông",
@@ -168,7 +168,7 @@ export default function ThietKeNoiThatChungCu({ relatedPosts, meta }) {
       },
     },
     description:
-      "Dịch vụ thiết kế & thi công nội thất chung cư chuyên nghiệp từ GreenLa Home. Giải pháp tối ưu không gian thông minh, hiện đại, đúng gu & ngân sách.",
+      "Dịch vụ thiết kế & thi công nội thất chung cư chuyên nghiệp từ Greenlahome. Giải pháp tối ưu không gian thông minh, hiện đại, đúng gu & ngân sách.",
     areaServed: "Việt Nam",
   };
   return (
@@ -373,9 +373,9 @@ export const getServerSideProps = async () => {
       title: "Thiết kế nội thất chung cư đẹp hiện đại | Tối ưu không gian | Greenlahome",
       description: "Hướng dẫn thiết kế nội thất chung cư đẹp, hiện đại: Bí quyết tối ưu không gian sống 30-120m² theo xu hướng 2025. Khám phá đa dạng phong cách & gợi ý bố trí chi tiết các phòng (khách, bếp, ngủ, ban công...) cùng yếu tố phong thủy",
       keywords:
-        "thi công nội thất trọn gói, nội thất chung cư, nội thất nhà phố, nội thất gỗ công nghiệp, GreenLa Home, thiết kế nội thất",
+        "thi công nội thất trọn gói, nội thất chung cư, nội thất nhà phố, nội thất gỗ công nghiệp, Greenlahome, thiết kế nội thất",
       robots: "index, follow",
-      author: "GreenLa Home",
+      author: "Greenlahome",
       canonical: "https://greenlahome.vn/thiet-ke-noi-that-chung-cu",
       og: {
         title: "Thiết kế nội thất chung cư đẹp hiện đại | Tối ưu không gian | Greenlahome",

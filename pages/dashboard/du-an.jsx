@@ -104,7 +104,7 @@ export default function Q8ProjectsDashboard() {
   };
 
   return (
-    <AdminLayout title="Greenla Home - Quản lý dự án">
+    <AdminLayout title="Greenlahome - Quản lý dự án">
       <div className="min-h-screen bg-gray-50">
         {/* Header */}
         <header className="bg-white shadow-sm border-b">
@@ -112,7 +112,7 @@ export default function Q8ProjectsDashboard() {
             <div className="flex items-center justify-between">
               <div>
                 <h1 className="text-3xl font-bold text-gray-900">
-                  Greenla Home Dashboard
+                  Greenlahome Dashboard
                 </h1>
                 <p className="text-sm text-gray-600 mt-1">
                   Quản lý dự án thiết kế nội thất
